@@ -1,0 +1,281 @@
+/* ============================================================
+   offres.css — Pricing cards + tableau comparatif
+   ============================================================ */
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto 60px;
+  padding-top: 16px;
+}
+
+/* ── Pricing card base ──────────────────────────────────────── */
+.pricing-card {
+  background: rgba(12,6,28,.65);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(124,58,237,.15);
+  border-radius: var(--radius-xl);
+  padding: 34px 28px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+/* Subtle inner glow */
+.pricing-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(124,58,237,.1), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pricing-card > * { position: relative; z-index: 1; }
+
+.pricing-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(124,58,237,.4);
+  box-shadow:
+    0 24px 60px rgba(124,58,237,.18),
+    0 0 0 1px rgba(244,114,182,.08),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* ── Featured card ──────────────────────────────────────────── */
+.pricing-card.featured {
+  background: rgba(14,5,32,.80);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border-color: rgba(124,58,237,.0);
+  box-shadow:
+    0 8px 40px rgba(0,0,0,.6),
+    0 0 40px rgba(124,58,237,.14),
+    inset 0 1px 0 rgba(255,255,255,.07);
+  background-clip: padding-box;
+  transform: translateY(-10px) scale(1.04);
+  z-index: 2;
+}
+
+/* Gradient border using pseudo-element on featured */
+.pricing-card.featured::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  padding: 1px;
+  background: linear-gradient(135deg, var(--bordeaux), var(--purple), rgba(244,114,182,.8));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pricing-card.featured::before {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(124,58,237,.2), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(159,18,57,.12), transparent 55%);
+}
+
+.pricing-card.featured:hover {
+  transform: translateY(-14px) scale(1.04);
+  box-shadow:
+    0 24px 70px rgba(124,58,237,.32),
+    0 0 60px rgba(159,18,57,.18),
+    0 0 0 1px rgba(244,114,182,.12),
+    inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+/* ── Pricing badge ──────────────────────────────────────────── */
+.pricing-badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--bordeaux), var(--purple));
+  color: #fff;
+  font-size: .71rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 4px 16px;
+  border-radius: 20px;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(124,58,237,.4);
+  z-index: 3;
+}
+
+.pricing-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 3px;
+}
+
+.pricing-sub {
+  font-size: .8rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+/* ── Price ──────────────────────────────────────────────────── */
+.pricing-price {
+  font-size: 2.8rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -.03em;
+}
+
+.pricing-card.featured .price-amount {
+  background: linear-gradient(90deg, #c4b5fd, var(--rose));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.price-amount {
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: -.03em;
+}
+
+.price-period {
+  font-size: .9rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
+/* ── Feature list ───────────────────────────────────────────── */
+.pricing-features {
+  flex: 1;
+  margin: 22px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  list-style: none;
+}
+
+.pricing-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .86rem;
+  color: var(--text-faint);
+}
+
+.pricing-feature.yes {
+  color: var(--text-white);
+}
+
+.feature-icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.check {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: var(--success);
+}
+
+.cross {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: rgba(255,255,255,.2);
+}
+
+/* ── Comparison table ───────────────────────────────────────── */
+.compare-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(124,58,237,.15);
+  background: rgba(12,6,28,.65);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: 0 8px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .86rem;
+  min-width: 540px;
+}
+
+.compare-table th,
+.compare-table td {
+  padding: 14px 18px;
+  text-align: center;
+  border-bottom: 1px solid rgba(124,58,237,.12);
+}
+
+.compare-table th:first-child,
+.compare-table td:first-child {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.compare-table thead th {
+  background: rgba(124,58,237,.08);
+  font-weight: 800;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-white);
+}
+
+.compare-table thead th.col-featured {
+  color: var(--accent);
+  background: rgba(124,58,237,.14);
+}
+
+.compare-table tbody tr:last-child td { border-bottom: none; }
+
+.compare-table tbody tr:hover td { background: rgba(124,58,237,.04); }
+
+.check { color: var(--success); font-weight: 700; }
+.cross { color: var(--text-faint); }
+
+/* ── Bouquet CTA ────────────────────────────────────────────── */
+.bouquet-cta {
+  border-top: 1px solid rgba(124,58,237,.12);
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.bouquet-cta-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin: 0;
+}
+
+.bouquet-cta-sub {
+  font-size: .95rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .pricing-grid { max-width: 360px; margin: 0 auto; }
+}
