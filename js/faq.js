@@ -1,24 +1,22 @@
-/* ============================================================
-   faq.js — Accordion toggle
-   ============================================================ */
+/* faq.js */
 
-(function () {
-  'use strict';
+document.addEventListener('DOMContentLoaded', function() {
 
-  document.querySelectorAll('.faq-question').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var item = btn.closest('.faq-item');
-      var isOpen = item.classList.contains('open');
+    var questions = document.querySelectorAll('.faq-question');
+    for (var i = 0; i < questions.length; i++) {
+        questions[i].addEventListener('click', function() {
+            var item = this.closest('.faq-item');
+            var isOpen = item.classList.contains('open');
 
-      // Close all
-      document.querySelectorAll('.faq-item.open').forEach(function (el) {
-        el.classList.remove('open');
-      });
+            var openItems = document.querySelectorAll('.faq-item.open');
+            for (var j = 0; j < openItems.length; j++) {
+                openItems[j].classList.remove('open');
+            }
 
-      // Open clicked if it was closed
-      if (!isOpen) {
-        item.classList.add('open');
-      }
-    });
-  });
-})();
+            if (!isOpen) {
+                item.classList.add('open');
+            }
+        });
+    }
+
+});

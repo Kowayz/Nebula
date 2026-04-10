@@ -1,152 +1,199 @@
-/* ============================================================
-   catalogue.js — Fetch API IGDB + filtres genre + recherche
-   ============================================================ */
+// catalogue.js — Chargement et filtrage des jeux depuis l'API
 
-(function () {
-  'use strict';
+document.addEventListener('DOMContentLoaded', function() {
 
-  const API_URL    = '/NEBULA/api/games.php?limit=50';
-  const grid       = document.getElementById('catalogueGrid');
-  const noResults  = document.getElementById('noResults');
-  const genresWrap = document.getElementById('filterGenres');
-  const searchInput= document.getElementById('searchInput');
-  const countEl    = document.getElementById('gameCount');
+    var URL_API = '/NEBULA/api/games.php?limit=50';
 
-  let games       = [];
-  let activeGenre = 'tous';
-  let searchTerm  = '';
+    var filtreGenres   = document.getElementById('filterGenres');
+    var champRecherche = document.getElementById('searchInput');
+    var grilleInclus   = document.getElementById('gridIncluded');
+    var grilleAchat    = document.getElementById('gridPurchase');
+    var compteurInclus = document.getElementById('countIncluded');
+    var compteurAchat  = document.getElementById('countPurchase');
+    var messageVide    = document.getElementById('noResults');
+    var sectionInclus  = document.getElementById('sectionIncluded');
+    var sectionAchat   = document.getElementById('sectionPurchase');
+    var separateur     = document.getElementById('catDivider');
 
-  // ── HTML escape ─────────────────────────────────────────────
-  function esc(str) {
-    return (str || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
+    var jeuxInclus = [];
+    var jeuxAchat  = [];
+    var recherche  = '';
 
-  // ── Build genre filter buttons ───────────────────────────────
-  function buildFilters() {
-    const genres = new Set();
-    games.forEach(g => {
-      (g.genre || '').split(',').forEach(t => {
-        const tag = t.trim();
-        if (tag) genres.add(tag);
-      });
-    });
+    // Prix disponibles pour les jeux à l'achat (attribués selon l'ID du jeu)
+    var listeP = [9.99, 14.99, 19.99, 24.99, 29.99, 39.99, 49.99, 59.99];
 
-    genresWrap.innerHTML = '<button class="filter-btn active" data-genre="tous">Tous</button>';
-
-    [...genres].sort().forEach(genre => {
-      const btn = document.createElement('button');
-      btn.className    = 'filter-btn';
-      btn.dataset.genre = genre.toLowerCase();
-      btn.textContent  = genre;
-      genresWrap.appendChild(btn);
-    });
-
-    genresWrap.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        genresWrap.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeGenre = btn.dataset.genre;
-        applyFilters();
-      });
-    });
-  }
-
-  // ── Render all game cards ────────────────────────────────────
-  function renderCards() {
-    grid.innerHTML = '';
-
-    games.forEach(g => {
-      const tags       = (g.genre || '').split(',').map(t => t.trim()).filter(Boolean);
-      const firstGenre = tags[0] ? tags[0].toLowerCase() : '';
-
-      const card = document.createElement('a');
-      card.className         = 'catalogue-card';
-      card.href              = '/NEBULA/produit.php?id=' + g.id_jeu;
-      card.dataset.genre     = firstGenre;
-      card.dataset.genres    = tags.map(t => t.toLowerCase()).join('|');
-      card.dataset.title     = (g.titre || '').toLowerCase();
-
-      const tagsHtml = tags.length
-        ? '<div class="catalogue-card-tags">' +
-            tags.slice(0, 2).map(t => '<span>' + esc(t) + '</span>').join('') +
-          '</div>'
-        : '';
-
-      const imgHtml = g.image_url
-        ? '<img src="' + esc(g.image_url) + '" alt="' + esc(g.titre) + '" loading="lazy">'
-        : '<div class="catalogue-card-placeholder"></div>';
-
-      card.innerHTML =
-        '<div class="catalogue-card-poster">' + imgHtml + '</div>' +
-        '<div class="catalogue-card-overlay">' +
-          tagsHtml +
-          '<div class="catalogue-card-title">' + esc(g.titre) + '</div>' +
-          (g.description ? '<div class="catalogue-card-desc">' + esc(g.description) + '</div>' : '') +
-          '<div class="catalogue-play-btn">' +
-            '<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>' +
-            'Jouer' +
-          '</div>' +
-        '</div>';
-
-      grid.appendChild(card);
-    });
-
-    if (countEl) countEl.textContent = games.length;
-    applyFilters();
-  }
-
-  // ── Filter visible cards ─────────────────────────────────────
-  function applyFilters() {
-    const cards = grid.querySelectorAll('.catalogue-card');
-    let visible = 0;
-
-    cards.forEach(card => {
-      const genres   = (card.dataset.genres || card.dataset.genre || '').toLowerCase().split('|');
-      const title    = (card.dataset.title || '').toLowerCase();
-      const genreOk  = activeGenre === 'tous' || genres.includes(activeGenre);
-      const searchOk = searchTerm === '' || title.includes(searchTerm);
-
-      if (genreOk && searchOk) {
-        card.removeAttribute('hidden');
-        visible++;
-      } else {
-        card.setAttribute('hidden', '');
-      }
-    });
-
-    if (noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
-  }
-
-  // ── Fetch games from API ─────────────────────────────────────
-  async function loadGames() {
-    try {
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (!Array.isArray(data)) throw new Error('Réponse invalide');
-      games = data;
-    } catch (err) {
-      grid.innerHTML =
-        '<p class="catalogue-api-error">Impossible de charger le catalogue. Réessayez plus tard.</p>';
-      if (countEl) countEl.textContent = '0';
-      return;
+    function formaterPrix(n) {
+        return n.toFixed(2).replace('.', ',') + ' €';
     }
 
-    buildFilters();
-    renderCards();
-  }
+    function getPrix(id) {
+        return listeP[id % listeP.length];
+    }
 
-  // ── Search input ─────────────────────────────────────────────
-  if (searchInput) {
-    searchInput.addEventListener('input', () => {
-      searchTerm = searchInput.value.toLowerCase().trim();
-      applyFilters();
-    });
-  }
+    // Protège contre les injections XSS en échappant les caractères spéciaux
+    function echapper(texte) {
+        if (!texte) return '';
+        texte = texte.replace(/&/g, '&amp;');
+        texte = texte.replace(/</g, '&lt;');
+        texte = texte.replace(/>/g, '&gt;');
+        texte = texte.replace(/"/g, '&quot;');
+        return texte;
+    }
 
-  loadGames();
-})();
+
+
+    // Affiche les cartes d'une section (inclus ou achat)
+    function afficherSection(jeux, grille, estAchat) {
+        grille.innerHTML = '';
+
+        for (var i = 0; i < jeux.length; i++) {
+            var j    = jeux[i];
+            var tags = (j.genre || '').split(',');
+            var premierTag = tags[0] ? tags[0].trim().toLowerCase() : '';
+
+            var carte = document.createElement('a');
+            carte.className = estAchat ? 'catalogue-card catalogue-card--purchase' : 'catalogue-card';
+            carte.href = '/NEBULA/produit.php?id=' + j.id_jeu;
+            carte.dataset.genre = premierTag;
+
+            // Stocker tous les genres pour le filtrage
+            var tagsNorm = [];
+            for (var t = 0; t < tags.length; t++) {
+                tagsNorm.push(tags[t].trim().toLowerCase());
+            }
+            carte.dataset.genres = tagsNorm.join('|');
+            carte.dataset.title  = (j.titre || '').toLowerCase();
+
+            // Image ou placeholder gris
+            var htmlImage = j.image_url
+                ? '<img src="' + echapper(j.image_url) + '" alt="' + echapper(j.titre) + '">'
+                : '<div class="catalogue-card-placeholder"></div>';
+
+            // Tags affichés sur la carte (2 max)
+            var htmlTags = '';
+            for (var t2 = 0; t2 < Math.min(tags.length, 2); t2++) {
+                if (tags[t2].trim()) {
+                    htmlTags += '<span>' + echapper(tags[t2].trim()) + '</span>';
+                }
+            }
+            if (htmlTags) {
+                htmlTags = '<div class="catalogue-card-tags">' + htmlTags + '</div>';
+            }
+
+            // Badge et bouton différents selon inclus ou achat
+            var htmlBadge, htmlAction;
+            if (estAchat) {
+                var prix  = getPrix(j.id_jeu);
+                htmlBadge  = '<div class="catalogue-price-badge">' + formaterPrix(prix) + '</div>';
+                htmlAction = '<div class="catalogue-buy-btn">Acheter</div>';
+            } else {
+                htmlBadge  = '<div class="catalogue-included-badge">Inclus</div>';
+                htmlAction = '<div class="catalogue-play-btn">Jouer</div>';
+            }
+
+            carte.innerHTML =
+                '<div class="catalogue-card-poster">' + htmlImage + '</div>' +
+                htmlBadge +
+                '<div class="catalogue-card-overlay">' +
+                    htmlTags +
+                    '<div class="catalogue-card-title">' + echapper(j.titre) + '</div>' +
+                    htmlAction +
+                '</div>';
+
+            grille.appendChild(carte);
+        }
+    }
+
+    // Cache ou affiche les cartes selon le genre et la recherche actifs
+    function appliquerFiltres() {
+        var totalVisible = 0;
+        var sections = [
+            { grille: grilleInclus, section: sectionInclus },
+            { grille: grilleAchat,  section: sectionAchat  }
+        ];
+
+        for (var s = 0; s < sections.length; s++) {
+            var cartes  = sections[s].grille.querySelectorAll('.catalogue-card');
+            var visible = 0;
+
+            for (var c = 0; c < cartes.length; c++) {
+                var carte   = cartes[c];
+                var genres  = (carte.dataset.genres || '').split('|');
+                var titre   = carte.dataset.title || '';
+                var rechOk  = recherche === '' || titre.indexOf(recherche) !== -1;
+
+                if (rechOk) {
+                    carte.removeAttribute('hidden');
+                    visible++;
+                } else {
+                    carte.setAttribute('hidden', '');
+                }
+            }
+
+            if (sections[s].section) {
+                sections[s].section.style.display = visible === 0 ? 'none' : '';
+            }
+            totalVisible += visible;
+        }
+
+        // Cacher le séparateur si une des deux sections est vide
+        if (separateur) {
+            var affInclus = sectionInclus ? sectionInclus.style.display : '';
+            var affAchat  = sectionAchat  ? sectionAchat.style.display  : '';
+            separateur.style.display = (affInclus === 'none' || affAchat === 'none') ? 'none' : '';
+        }
+
+        if (messageVide) {
+            messageVide.style.display = totalVisible === 0 ? 'block' : 'none';
+        }
+    }
+
+    // Charge les jeux depuis l'API puis les affiche
+    function chargerJeux() {
+        fetch(URL_API)
+            .then(function(reponse) {
+                if (!reponse.ok) {
+                    throw new Error('Erreur serveur : ' + reponse.status);
+                }
+                return reponse.json();
+            })
+            .then(function(donnees) {
+                if (!Array.isArray(donnees)) return;
+
+                // Séparer les jeux : ID pair = achat, ID impair = inclus dans l'abonnement
+                jeuxInclus = [];
+                jeuxAchat  = [];
+                for (var i = 0; i < donnees.length; i++) {
+                    if (donnees[i].id_jeu % 2 !== 0) {
+                        jeuxInclus.push(donnees[i]);
+                    } else {
+                        jeuxAchat.push(donnees[i]);
+                    }
+                }
+
+                if (compteurInclus) compteurInclus.textContent = jeuxInclus.length;
+                if (compteurAchat)  compteurAchat.textContent  = jeuxAchat.length;
+
+
+                afficherSection(jeuxInclus, grilleInclus, false);
+                afficherSection(jeuxAchat,  grilleAchat,  true);
+                appliquerFiltres();
+            })
+            .catch(function() {
+                if (grilleInclus) {
+                    grilleInclus.innerHTML = '<p class="catalogue-api-error">Impossible de charger le catalogue. Réessayez plus tard.</p>';
+                }
+                if (grilleAchat) grilleAchat.innerHTML = '';
+            });
+    }
+
+    // Déclencher le filtrage à chaque frappe dans la barre de recherche
+    if (champRecherche) {
+        champRecherche.addEventListener('input', function() {
+            recherche = champRecherche.value.toLowerCase().trim();
+            appliquerFiltres();
+        });
+    }
+
+    chargerJeux();
+});

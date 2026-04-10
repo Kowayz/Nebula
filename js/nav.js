@@ -1,50 +1,71 @@
-/* ============================================================
-   nav.js — Navigation mobile + scroll effect
-   ============================================================ */
+// nav.js — Navigation mobile et effet de scroll
 
-(function () {
-  'use strict';
+document.addEventListener('DOMContentLoaded', function() {
 
-  const navbar     = document.getElementById('navbar');
-  const hamburger  = document.getElementById('hamburger');
-  const navPanel   = document.getElementById('navPanel');
-  const navOverlay = document.getElementById('navOverlay');
+    var navbar    = document.getElementById('navbar');
+    var hamburger = document.getElementById('hamburger');
+    var navPanel  = document.getElementById('navPanel');
+    var overlay   = document.getElementById('navOverlay');
 
-  // Scroll shadow
-  if (navbar) {
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 20);
-    }, { passive: true });
-  }
+    // Ajouter une ombre à la navbar quand on scrolle vers le bas
+    if (navbar) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    }
 
-  function closeMenu() {
-    navPanel?.classList.remove('open');
-    hamburger?.classList.remove('open');
-    navOverlay?.classList.remove('open');
-    hamburger?.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
+    function fermerMenu() {
+        if (navPanel)   navPanel.classList.remove('open');
+        if (hamburger)  hamburger.classList.remove('open');
+        if (overlay)    overlay.classList.remove('open');
+        if (hamburger)  hamburger.setAttribute('aria-expanded', 'false');
+        // Rendre le scroll de la page à nouveau possible
+        document.body.style.overflow = '';
+    }
 
-  function openMenu() {
-    navPanel?.classList.add('open');
-    hamburger?.classList.add('open');
-    navOverlay?.classList.add('open');
-    hamburger?.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
+    function ouvrirMenu() {
+        if (navPanel)   navPanel.classList.add('open');
+        if (hamburger)  hamburger.classList.add('open');
+        if (overlay)    overlay.classList.add('open');
+        if (hamburger)  hamburger.setAttribute('aria-expanded', 'true');
+        // Bloquer le scroll de la page derrière le menu
+        document.body.style.overflow = 'hidden';
+    }
 
-  if (hamburger) {
-    hamburger.addEventListener('click', () => {
-      navPanel?.classList.contains('open') ? closeMenu() : openMenu();
+    if (hamburger) {
+        hamburger.addEventListener('click', function() {
+            if (navPanel && navPanel.classList.contains('open')) {
+                fermerMenu();
+            } else {
+                ouvrirMenu();
+            }
+        });
+    }
+
+    // Cliquer sur l'overlay (fond sombre) ferme le menu
+    if (overlay) {
+        overlay.addEventListener('click', fermerMenu);
+    }
+
+    // Cliquer sur un lien du menu le ferme
+    if (navPanel) {
+        var liens = navPanel.querySelectorAll('a');
+        for (var i = 0; i < liens.length; i++) {
+            liens[i].addEventListener('click', fermerMenu);
+        }
+    }
+
+    // Touche Echap pour fermer le menu
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') fermerMenu();
     });
-  }
 
-  if (navOverlay) navOverlay.addEventListener('click', closeMenu);
-
-  if (navPanel) {
-    navPanel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-  }
-
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
-  window.addEventListener('resize', () => { if (window.innerWidth > 880) closeMenu(); }, { passive: true });
-})();
+    // Fermer automatiquement si on repasse en vue desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 880) fermerMenu();
+    });
+});

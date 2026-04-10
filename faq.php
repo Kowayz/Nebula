@@ -27,7 +27,7 @@ require 'includes/header.php';
   <div class="faq-hero-orb faq-hero-orb-c"></div>
   <div class="faq-hero-inner">
     <div class="faq-hero-tag">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">
       Aide &amp; Support
     </div>
     <h1 class="faq-hero-title">Questions <span class="gradient-text">fréquentes</span></h1>
@@ -45,21 +45,21 @@ require 'includes/header.php';
   <div class="what-grid">
     <div class="what-card">
       <div class="what-card-icon" style="background:linear-gradient(135deg,rgba(124,58,237,.4),rgba(159,18,57,.25))">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="22" height="22" class="icon-img">
       </div>
       <div class="what-card-title">Streaming haute performance</div>
       <div class="what-card-desc">Vos jeux tournent sur nos serveurs GPU et sont diffusés en direct sur votre écran, comme Netflix mais interactif. Moins de 20 ms de latence.</div>
     </div>
     <div class="what-card">
       <div class="what-card-icon" style="background:linear-gradient(135deg,rgba(244,114,182,.35),rgba(124,58,237,.25))">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/platforms/nintendo.png" alt="icon" width="24" height="24" class="platform-icon">
       </div>
       <div class="what-card-title">Tous vos appareils</div>
       <div class="what-card-desc">PC, Mac, Smart TV, smartphone, tablette. Reprenez votre partie là où vous l'avez laissée, sur l'appareil de votre choix.</div>
     </div>
     <div class="what-card">
       <div class="what-card-icon" style="background:linear-gradient(135deg,rgba(34,197,94,.3),rgba(124,58,237,.25))">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/contact/document-legal.png" alt="icon" width="22" height="22" class="icon-img">
       </div>
       <div class="what-card-title">Sans engagement</div>
       <div class="what-card-desc">Aucun téléchargement, aucun matériel coûteux, aucun engagement. Abonnez-vous et commencez à jouer en quelques secondes.</div>
@@ -81,7 +81,7 @@ require 'includes/header.php';
         <div class="step-connector"></div>
       </div>
       <div class="step-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/contact/localisation.png" alt="icon" width="20" height="20" class="icon-img">
       </div>
       <div class="step-title">Créer un compte</div>
       <div class="step-desc">Inscrivez-vous en 60 secondes avec votre adresse e-mail. Aucune carte bancaire requise pour l'offre Starter.</div>
@@ -92,7 +92,7 @@ require 'includes/header.php';
         <div class="step-connector"></div>
       </div>
       <div class="step-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 8h6M12 6v4"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="22" height="22" class="icon-img">
       </div>
       <div class="step-title">Choisir un jeu</div>
       <div class="step-desc">Parcourez notre catalogue de +200 titres. Filtrez par genre, nouveautés ou popularité.</div>
@@ -103,7 +103,7 @@ require 'includes/header.php';
         <div class="step-connector"></div>
       </div>
       <div class="step-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/platforms/bouton-play.png" alt="icon" width="16" height="16" class="icon-img">
       </div>
       <div class="step-title">Appuyer sur Jouer</div>
       <div class="step-desc">Le jeu démarre en quelques secondes directement dans votre navigateur. Aucun téléchargement.</div>
@@ -113,7 +113,7 @@ require 'includes/header.php';
         <div class="step-num">04</div>
       </div>
       <div class="step-icon-wrap">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">
       </div>
       <div class="step-title">Sauvegardes auto</div>
       <div class="step-desc">Votre progression est sauvegardée automatiquement dans le cloud. Reprenez sur n'importe quel appareil.</div>
@@ -130,27 +130,27 @@ require 'includes/header.php';
   </div>
   <div class="benefits-grid">
     <div class="benefit-item">
-      <div class="benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div class="benefit-icon"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="22" height="22" class="icon-img"></div>
       <div class="benefit-body"><div class="benefit-title">Latence &lt; 20 ms</div><div class="benefit-desc">Inférieure à la plupart des concurrents. Idéal pour les jeux compétitifs.</div></div>
     </div>
     <div class="benefit-item">
-      <div class="benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+      <div class="benefit-icon"><img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img"></div>
       <div class="benefit-body"><div class="benefit-title">4K · 144 FPS</div><div class="benefit-desc">Ultra HD avec HDR10 et ray tracing sur tous vos jeux inclus.</div></div>
     </div>
     <div class="benefit-item">
-      <div class="benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+      <div class="benefit-icon"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="20" height="20" class="icon-img"></div>
       <div class="benefit-body"><div class="benefit-title">Sauvegardes cloud</div><div class="benefit-desc">Synchronisation automatique et conservation 90 jours après résiliation.</div></div>
     </div>
     <div class="benefit-item">
-      <div class="benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+      <div class="benefit-icon"><img src="/NEBULA/public/assets/img/icons/contact/document-legal.png" alt="icon" width="22" height="22" class="icon-img"></div>
       <div class="benefit-body"><div class="benefit-title">Sans engagement</div><div class="benefit-desc">Résiliation en un clic depuis votre espace. Remboursement garanti 7 jours.</div></div>
     </div>
     <div class="benefit-item">
-      <div class="benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+      <div class="benefit-icon"><img src="/NEBULA/public/assets/img/icons/platforms/nintendo.png" alt="icon" width="24" height="24" class="platform-icon"></div>
       <div class="benefit-body"><div class="benefit-title">Multi-appareils</div><div class="benefit-desc">PC, Mac, TV, smartphone — reprenez exactement là où vous étiez.</div></div>
     </div>
     <div class="benefit-item">
-      <div class="benefit-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 8h6M12 6v4"/></svg></div>
+      <div class="benefit-icon"><img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="22" height="22" class="icon-img"></div>
       <div class="benefit-body"><div class="benefit-title">+200 jeux AAA</div><div class="benefit-desc">Catalogue mis à jour chaque semaine avec les dernières sorties.</div></div>
     </div>
   </div>
@@ -170,7 +170,7 @@ require 'includes/header.php';
       <button class="faq-question" type="button">
         <span class="faq-q-num"><?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?></span>
         <span class="faq-q-text"><?= htmlspecialchars($f[0]) ?></span>
-        <svg class="faq-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/nav/fleche-bas.png" alt="icon" width="12" height="12" class="icon-img">
       </button>
       <div class="faq-answer-wrap">
         <div class="faq-answer"><p><?= htmlspecialchars($f[1]) ?></p></div>

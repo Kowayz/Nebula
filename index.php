@@ -5,12 +5,35 @@ $pageTitle = 'Jouez à vos jeux n\'importe où';
 $pageCSS   = ['index'];
 $pageJS    = [];
 
+require_once 'includes/igdb.php';
+
+$topGames = [];
 try {
-    $pdo  = getPDO();
-    $stmt = $pdo->query('SELECT * FROM jeu ORDER BY id_jeu LIMIT 6');
-    $jeux = $stmt->fetchAll();
-} catch (Exception $e) {
-    $jeux = [];
+    $token = igdb_token();
+    if ($token) {
+        $fields  = "fields id,name,summary,genres.name,cover.url,artworks.url,screenshots.url,rating_count,hypes; where cover != null & hypes > 50; sort hypes desc; limit 3;";
+        $res = igdb_query('games', $fields, $token);
+        if (count($res) < 3) {
+            $res = igdb_query('games', "fields id,name,summary,genres.name,cover.url,artworks.url,screenshots.url,rating_count; where cover != null & rating > 85; sort rating_count desc; limit 3;", $token);
+        }
+        foreach ($res as $g) {
+            $mapped = igdb_map($g);
+            $mapped['featured_url'] = isset($g['screenshots'][0]) ? igdb_cover($g['screenshots'][0]['url'], 't_1080p') : (isset($g['artworks'][0]) ? igdb_cover($g['artworks'][0]['url'], 't_1080p') : igdb_cover($g['cover']['url'] ?? null, 't_cover_big'));
+            $mapped['logo_url'] = igdb_logo($g['name']);
+            $topGames[] = $mapped;
+        }
+    }
+} catch (Exception $e) {}
+
+// Fallback BDD
+if (count($topGames) < 3) {
+    try {
+        $pdo = getPDO();
+        $stmt = $pdo->query('SELECT * FROM jeu ORDER BY id_jeu LIMIT 3');
+        foreach ($stmt->fetchAll() as $g) {
+            $topGames[] = ['id_jeu' => $g['id_jeu'], 'titre' => $g['titre'], 'genre' => $g['genre'], 'featured_url' => $g['image_url'], 'logo_url' => null];
+        }
+    } catch (Exception $e) {}
 }
 
 require 'includes/header.php';
@@ -23,7 +46,7 @@ require 'includes/header.php';
 
   <div class="hero-actions">
     <a href="/NEBULA/auth.php?tab=register" class="btn btn-primary btn-lg">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <img src="/NEBULA/public/assets/img/icons/platforms/bouton-play.png" alt="icon" width="16" height="16" class="icon-img">
       Commencer gratuitement
     </a>
     <a href="/NEBULA/demo.php" class="btn btn-outline btn-lg">Voir la démo</a>
@@ -32,19 +55,19 @@ require 'includes/header.php';
   <div class="hero-stats">
     <div class="hero-stat">
       <span class="stat-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="22" height="22" class="icon-img">
       </span>
       <div><span class="stat-value">4K Ultra HD</span><span class="stat-label">Résolution maximale</span></div>
     </div>
     <div class="hero-stat">
       <span class="stat-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="22" height="22" class="icon-img">
       </span>
       <div><span class="stat-value">144 FPS</span><span class="stat-label">Fluidité maximale</span></div>
     </div>
     <div class="hero-stat">
       <span class="stat-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/dashboard/horloge.png" alt="icon" width="14" height="14" class="icon-img">
       </span>
       <div><span class="stat-value">&lt; 20ms</span><span class="stat-label">Latence ultra-faible</span></div>
     </div>
@@ -59,64 +82,58 @@ require 'includes/header.php';
     <p>Des centaines de jeux AAA disponibles instantanément, de nouvelles sorties chaque mois</p>
   </div>
 
-  <div class="games-grid">
-    <?php
-    $display = !empty($jeux) ? $jeux : [
-      ['id_jeu'=>1,'titre'=>'ARC Raiders',    'genre'=>'Extraction Shooter','image_url'=>'','description'=>'Affrontez des machines implacables venues des cieux dans ce shooter PvPvE intense.'],
-      ['id_jeu'=>2,'titre'=>'Cyberpunk 2077',  'genre'=>'Action-RPG',        'image_url'=>'','description'=>'Incarnez V dans la mégalopole de Night City, un monde cyberpunk sombre et immersif.'],
-      ['id_jeu'=>3,'titre'=>'Elden Ring',       'genre'=>'Action-RPG',        'image_url'=>'','description'=>'Explorez les Terres Intermédiaires dans cet action-RPG épique co-écrit par Miyazaki.'],
-      ['id_jeu'=>4,'titre'=>"No Man's Sky",     'genre'=>'Exploration',       'image_url'=>'','description'=>'Voyagez de planète en planète dans un univers procédural infini.'],
-      ['id_jeu'=>5,'titre'=>'Hades II',         'genre'=>'Roguelike',         'image_url'=>'','description'=>'Incarnez Mélinoé dans ce dungeon crawler inspiré de la mythologie grecque.'],
-      ['id_jeu'=>6,'titre'=>'Forza Horizon 5',  'genre'=>'Course',            'image_url'=>'','description'=>'500 voitures iconiques, le Mexique en monde ouvert.'],
-    ];
-
-    $genreColors = [
-      'Action-RPG'          => ['rgba(124,58,237,.6)','rgba(159,18,57,.4)'],
-      'Extraction Shooter'  => ['rgba(6,182,212,.5)', 'rgba(124,58,237,.4)'],
-      'Exploration'         => ['rgba(34,197,94,.4)', 'rgba(124,58,237,.3)'],
-      'Roguelike'           => ['rgba(245,158,11,.5)','rgba(159,18,57,.4)'],
-      'Course'              => ['rgba(239,68,68,.5)', 'rgba(245,158,11,.3)'],
-    ];
-
-    foreach ($display as $j):
-      $genre = trim(explode(',', $j['genre'])[0]);
-      $cols  = $genreColors[$genre] ?? ['rgba(124,58,237,.5)','rgba(159,18,57,.35)'];
+  <div class="games-showcase">
+    <?php if (count($topGames) > 0): 
+      $spotlight = $topGames[0];
     ?>
-    <div class="game-card">
-      <!-- Image ou placeholder gradient -->
-      <?php if (!empty($j['image_url'])): ?>
-        <div class="game-card-img">
-          <img src="/NEBULA/<?= htmlspecialchars($j['image_url']) ?>"
-               alt="<?= htmlspecialchars($j['titre']) ?>" loading="lazy">
+    <a href="/NEBULA/produit.php?id=<?= $spotlight['id_jeu'] ?>" class="game-spotlight">
+      <img class="game-spotlight-img" src="<?= htmlspecialchars($spotlight['featured_url'] ?? '') ?>" alt="">
+      <div class="game-spotlight-overlay">
+        <div class="game-spotlight-top">
+          <div class="gs-badge">Jeu inclus</div>
+          <div class="gs-live">En direct</div>
         </div>
-      <?php else: ?>
-        <div class="game-card-placeholder" style="background:linear-gradient(135deg,<?= $cols[0] ?>,<?= $cols[1] ?>,#060210)">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 8h6M12 6v4"/></svg>
-        </div>
-      <?php endif; ?>
-
-      <!-- Badge genre -->
-      <div class="game-card-badge"><?= htmlspecialchars($genre) ?></div>
-
-      <!-- Overlay avec infos -->
-      <div class="game-card-overlay">
-        <div class="game-card-meta">
-          <div class="game-card-title"><?= htmlspecialchars($j['titre']) ?></div>
-          <div class="game-card-bottom">
-            <div class="game-card-platforms">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M8.5 8.5 15.5 15.5M15.5 8.5 8.5 15.5"/></svg>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21V3h5a3.5 3.5 0 010 7H8"/><path d="M5 21h14"/></svg>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <div class="game-spotlight-bottom">
+          <div>
+            <?php if (!empty($spotlight['logo_url'])): ?>
+              <img src="<?= htmlspecialchars($spotlight['logo_url']) ?>" alt="<?= htmlspecialchars($spotlight['titre']) ?>" class="gs-logo">
+            <?php else: ?>
+              <div class="gs-title"><?= htmlspecialchars($spotlight['titre']) ?></div>
+            <?php endif; ?>
+          </div>
+          <div class="gs-actions">
+            <div class="gs-platforms">
+              <img src="/NEBULA/public/assets/img/icons/platforms/windows.png" alt="icon" width="16" height="16" class="icon-img" style="opacity:0.6">
             </div>
-            <a href="/NEBULA/auth.php?tab=register" class="game-card-cta">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Jouer
-            </a>
+            <div class="gs-cta">
+              <img src="/NEBULA/public/assets/img/icons/platforms/bouton-play.png" alt="icon" width="14" height="14" class="icon-img"> Jouer
+            </div>
           </div>
         </div>
       </div>
+    </a>
+    <?php endif; ?>
+
+    <div class="game-posters">
+      <?php for($i = 1; $i < count($topGames); $i++): 
+        $poster = $topGames[$i];
+      ?>
+      <a href="/NEBULA/produit.php?id=<?= $poster['id_jeu'] ?>" class="game-poster">
+        <img class="game-poster-img" src="<?= htmlspecialchars($poster['featured_url'] ?? '') ?>" alt="">
+        <div class="game-poster-overlay">
+          <div class="gp-badge">Populaire</div>
+          <?php if (!empty($poster['logo_url'])): ?>
+            <img src="<?= htmlspecialchars($poster['logo_url']) ?>" alt="<?= htmlspecialchars($poster['titre']) ?>" class="gp-logo">
+          <?php else: ?>
+            <div class="gp-title"><?= htmlspecialchars($poster['titre']) ?></div>
+          <?php endif; ?>
+          <div class="gp-cta">
+            <img src="/NEBULA/public/assets/img/icons/platforms/bouton-play.png" alt="icon" width="12" height="12" class="icon-img"> Jouer
+          </div>
+        </div>
+      </a>
+      <?php endfor; ?>
     </div>
-    <?php endforeach; ?>
   </div>
 
   <div class="text-center mt-32">
@@ -134,12 +151,12 @@ require 'includes/header.php';
   <div class="features-grid">
     <?php
     $features = [
-      ['<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>','Latence ultra-faible','Moins de 20ms grâce à notre infrastructure distribuée, peu importe votre localisation.'],
-      ['<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>','4K 144 FPS',"Qualité d'image exceptionnelle jusqu'en 4K Ultra HD à 144 FPS, sur n'importe quel écran."],
-      ['<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>','Multi-appareils',"PC, Mac, TV, smartphone — reprenez votre partie là où vous l'avez laissée."],
-      ['<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>','Sauvegardes cloud','Vos sauvegardes sont synchronisées automatiquement. Ne perdez plus jamais votre progression.'],
-      ['<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 8h6M12 6v4"/></svg>','Compatible manettes','DualSense, Xbox Series, contrôleurs Bluetooth — plug & play garanti.'],
-      ['<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>','Sans engagement','Résiliez quand vous voulez. Nos abonnements sont flexibles, sans frais cachés.'],
+      ['<img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="22" height="22" class="icon-img">','Latence ultra-faible','Moins de 20ms grâce à notre infrastructure distribuée, peu importe votre localisation.'],
+      ['<img src="/NEBULA/public/assets/img/icons/contact/localisation.png" alt="icon" width="20" height="20" class="icon-img">','4K 144 FPS',"Qualité d'image exceptionnelle jusqu'en 4K Ultra HD à 144 FPS, sur n'importe quel écran."],
+      ['<img src="/NEBULA/public/assets/img/icons/platforms/nintendo.png" alt="icon" width="24" height="24" class="platform-icon">','Multi-appareils',"PC, Mac, TV, smartphone — reprenez votre partie là où vous l'avez laissée."],
+      ['<img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="20" height="20" class="icon-img">','Sauvegardes cloud','Vos sauvegardes sont synchronisées automatiquement. Ne perdez plus jamais votre progression.'],
+      ['<img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="22" height="22" class="icon-img">','Compatible manettes','DualSense, Xbox Series, contrôleurs Bluetooth — plug & play garanti.'],
+      ['<img src="/NEBULA/public/assets/img/icons/contact/document-legal.png" alt="icon" width="22" height="22" class="icon-img">','Sans engagement','Résiliez quand vous voulez. Nos abonnements sont flexibles, sans frais cachés.'],
     ];
     foreach ($features as [$icon,$title,$desc]): ?>
       <div class="feature-card">

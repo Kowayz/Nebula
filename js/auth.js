@@ -1,72 +1,51 @@
-/* ============================================================
-   auth.js — Tab switching + password toggle + validation
-   ============================================================ */
+/* auth.js */
 
-(function () {
-  'use strict';
+document.addEventListener('DOMContentLoaded', function() {
 
-  const card = document.querySelector('.auth-card');
-  if (!card) return;
+    // Boutons pour afficher/cacher le mot de passe
+    var bascules = document.querySelectorAll('.input-toggle');
+    for (var i = 0; i < bascules.length; i++) {
+        bascules[i].addEventListener('click', function() {
+            var champ = this.closest('.input-wrapper').querySelector('input');
+            if (!champ) return;
+            if (champ.type === 'password') {
+                champ.type = 'text';
+                this.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+            } else {
+                champ.type = 'password';
+                this.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+            }
+        });
+    }
 
-  const tabs   = card.querySelectorAll('.auth-tab[data-tab]');
-  const panels = card.querySelectorAll('.auth-panel');
+    // Validation du formulaire d'inscription avant envoi
+    var formulaire = document.getElementById('registerForm');
+    if (formulaire) {
+        formulaire.addEventListener('submit', function(e) {
+            var anciennesErreurs = formulaire.querySelectorAll('.form-error');
+            for (var j = 0; j < anciennesErreurs.length; j++) {
+                anciennesErreurs[j].remove();
+            }
 
-  /* ── Activation d'un onglet ────────────────────────────────── */
-  function switchTab(name) {
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-    panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
-    history.replaceState(null, '', '?tab=' + name);
-  }
+            var mdp     = document.getElementById('reg-password');
+            var mdpConf = document.getElementById('reg-password-confirm');
 
-  /* ── Init : onglet défini par PHP ───────────────────────────── */
-  switchTab(card.dataset.initialTab || 'login');
+            if (mdp.value.length < 8) {
+                e.preventDefault();
+                var err1 = document.createElement('p');
+                err1.className = 'form-error';
+                err1.textContent = 'Le mot de passe doit contenir au moins 8 caractères.';
+                mdp.closest('.form-group').appendChild(err1);
+                return;
+            }
+            if (mdp.value !== mdpConf.value) {
+                e.preventDefault();
+                var err2 = document.createElement('p');
+                err2.className = 'form-error';
+                err2.textContent = 'Les mots de passe ne correspondent pas.';
+                mdpConf.closest('.form-group').appendChild(err2);
+            }
+        });
+    }
 
-  /* ── Liens "Créer un compte" / "Se connecter" dans le footer ── */
-  card.querySelectorAll('[data-switch-tab]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      switchTab(link.dataset.switchTab);
-    });
-  });
-
-  /* ── Toggle visibilité mot de passe ────────────────────────── */
-  card.querySelectorAll('.input-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const input = btn.closest('.input-wrapper').querySelector('input');
-      if (!input) return;
-      const show = input.type === 'password';
-      input.type = show ? 'text' : 'password';
-      btn.textContent = show ? '🙈' : '👁';
-      btn.setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
-    });
-  });
-
-  /* ── Validation register ───────────────────────────────────── */
-  const registerForm = document.getElementById('registerForm');
-  if (registerForm) {
-    registerForm.addEventListener('submit', (e) => {
-      registerForm.querySelectorAll('.form-error').forEach(el => el.remove());
-
-      const pwd  = document.getElementById('reg-password');
-      const conf = document.getElementById('reg-password-confirm');
-
-      if (pwd.value.length < 8) {
-        e.preventDefault();
-        showError(pwd, 'Le mot de passe doit contenir au moins 8 caractères.');
-        return;
-      }
-      if (pwd.value !== conf.value) {
-        e.preventDefault();
-        showError(conf, 'Les mots de passe ne correspondent pas.');
-      }
-    });
-  }
-
-  function showError(input, message) {
-    const err = document.createElement('p');
-    err.className = 'form-error';
-    err.textContent = message;
-    input.closest('.form-group').appendChild(err);
-  }
-
-})();
+});

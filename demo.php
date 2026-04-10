@@ -55,7 +55,7 @@ require 'includes/header.php';
       </div>
       <div class="demo-browser-url">
         <span class="demo-url-icon">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/ecommerce/bouclier-securite.png" alt="icon" width="14" height="14" class="icon-img">
         </span>
         nebula.gg/play/elden-ring
       </div>
@@ -102,7 +102,7 @@ require 'includes/header.php';
       <!-- HUD bottom-left -->
       <div class="demo-hud demo-hud-bl">
         <div class="demo-hud-bar">
-          <svg class="demo-hud-bar-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 8h6M12 6v4"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="22" height="22" class="icon-img">
           DualSense détecté
         </div>
       </div>
@@ -114,7 +114,7 @@ require 'includes/header.php';
           <div class="demo-play-ring demo-ring-2"></div>
         </div>
         <a href="/NEBULA/auth.php?tab=register" class="demo-play-btn">
-          <svg class="demo-play-icon" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/platforms/bouton-play.png" alt="icon" width="16" height="16" class="icon-img">
         </a>
         <span class="demo-play-label">Démarrer la démo</span>
       </div>
@@ -129,13 +129,13 @@ require 'includes/header.php';
       </div>
       <div class="demo-bottom-actions">
         <div class="demo-icon-btn" title="Paramètres">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">
         </div>
         <div class="demo-icon-btn" title="Plein écran">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">
         </div>
         <div class="demo-icon-btn" title="Son">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">
         </div>
       </div>
     </div>
@@ -155,17 +155,17 @@ require 'includes/header.php';
         [
           'title' => 'Créer un compte',
           'desc'  => "Inscrivez-vous en moins d'une minute avec votre e-mail. Aucune carte bancaire requise pour commencer.",
-          'icon'  => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>',
+          'icon'  => '<img src="/NEBULA/public/assets/img/icons/contact/email.png" alt="icon" width="20" height="20" class="icon-img">',
         ],
         [
           'title' => 'Choisir un jeu',
           'desc'  => 'Parcourez +200 titres disponibles instantanément. Filtrez par genre, popularité ou nouveautés.',
-          'icon'  => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 8h6M12 6v4"/></svg>',
+          'icon'  => '<img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="22" height="22" class="icon-img">',
         ],
         [
           'title' => 'Jouer immédiatement',
           'desc'  => "Le jeu démarre en quelques secondes dans votre navigateur. Aucun téléchargement, aucune installation.",
-          'icon'  => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+          'icon'  => '<img src="/NEBULA/public/assets/img/icons/platforms/bouton-play.png" alt="icon" width="16" height="16" class="icon-img">',
         ],
       ];
       foreach ($steps as $i => $step): ?>
@@ -192,7 +192,7 @@ require 'includes/header.php';
     <p class="demo-cta-sub">Rejoignez des milliers de joueurs qui jouent déjà sans télécharger quoi que ce soit.</p>
     <div class="demo-cta-actions">
       <a href="/NEBULA/auth.php?tab=register" class="btn btn-primary btn-lg">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/platforms/bouton-play.png" alt="icon" width="16" height="16" class="icon-img">
         Commencer gratuitement
       </a>
       <a href="/NEBULA/jeux.php" class="btn btn-outline btn-lg">Parcourir le catalogue</a>

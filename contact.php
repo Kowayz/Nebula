@@ -48,7 +48,7 @@ require 'includes/header.php';
 
       <div class="contact-item">
         <div class="contact-item-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/contact/email.png" alt="icon" width="20" height="20" class="icon-img">
         </div>
         <div class="contact-item-text">
           <strong>E-mail</strong>
@@ -58,7 +58,7 @@ require 'includes/header.php';
 
       <div class="contact-item">
         <div class="contact-item-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/contact/email.png" alt="icon" width="20" height="20" class="icon-img">
         </div>
         <div class="contact-item-text">
           <strong>Discord</strong>
@@ -68,7 +68,7 @@ require 'includes/header.php';
 
       <div class="contact-item">
         <div class="contact-item-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/dashboard/horloge.png" alt="icon" width="14" height="14" class="icon-img">
         </div>
         <div class="contact-item-text">
           <strong>Horaires</strong>
@@ -78,7 +78,7 @@ require 'includes/header.php';
 
       <div class="contact-item">
         <div class="contact-item-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/ecommerce/bouclier-securite.png" alt="icon" width="14" height="14" class="icon-img">
         </div>
         <div class="contact-item-text">
           <strong>Support prioritaire</strong>
@@ -120,7 +120,7 @@ require 'includes/header.php';
           <textarea id="message" name="message" class="form-control" rows="5" placeholder="Décrivez votre demande…" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary btn-full">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">
           Envoyer le message
         </button>
       </form>

@@ -52,7 +52,7 @@ $pageJS  = $pageJS  ?? [];
   <!-- Desktop actions -->
   <div class="navbar-actions" id="navActions">
     <a href="/NEBULA/panier.php" class="navbar-cart" aria-label="Panier">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      <img src="/NEBULA/public/assets/img/icons/ecommerce/panier.png" alt="icon" width="18" height="18" class="icon-img">
       <?php if (!empty($_SESSION['panier'])): ?>
         <span class="navbar-cart-dot"></span>
       <?php endif; ?>
@@ -83,7 +83,7 @@ $pageJS  = $pageJS  ?? [];
   </ul>
   <div class="navbar-panel-actions">
     <a href="/NEBULA/panier.php" class="btn btn-ghost btn-sm" style="display:flex;align-items:center;gap:8px">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      <img src="/NEBULA/public/assets/img/icons/ecommerce/panier.png" alt="icon" width="18" height="18" class="icon-img">
       Panier<?php if (!empty($_SESSION['panier'])): ?> <span style="background:linear-gradient(135deg,#9f1239,#7c3aed);border-radius:10px;padding:1px 7px;font-size:.65rem;font-weight:700">1</span><?php endif; ?>
     </a>
     <?php if (!empty($_SESSION['user_id'])): ?>

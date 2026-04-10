@@ -1,121 +1,176 @@
-/* ============================================================
-   configurateur.js — Real-time price calculator
-   ============================================================ */
+// configurateur.js — Calculateur de prix en temps réel
 
-(function () {
-  'use strict';
+document.addEventListener('DOMContentLoaded', function() {
 
-  /* ── DOM refs ─────────────────────────────────────────────── */
-  const genreCheckboxes  = document.querySelectorAll('.genre-checkbox');
-  const genreChips       = document.querySelectorAll('.genre-chip');
-  const qualityRadios    = document.querySelectorAll('.quality-radio');
-  const optionCheckboxes = document.querySelectorAll('.option-checkbox');
+    var boutiqueCases  = document.querySelectorAll('.boutique-checkbox');
+    var boutiqueCartes = document.querySelectorAll('.boutique-card');
+    var qualiteRadios  = document.querySelectorAll('.quality-radio');
+    var optionCases    = document.querySelectorAll('.option-checkbox');
+    var optionCartes   = document.querySelectorAll('.option-card');
 
-  const summaryGenres      = document.getElementById('summaryGenres');
-  const summaryQualityName = document.getElementById('summaryQualityName');
-  const summaryQualityPrice= document.getElementById('summaryQualityPrice');
-  const summaryOptionsList = document.getElementById('summaryOptionsList');
-  const summaryOptionsSection = document.getElementById('summaryOptionsSection');
-  const summaryTotal       = document.getElementById('summaryTotal');
+    var resumeBoutique       = document.getElementById('summaryBoutique');
+    var resumeQualiteNom     = document.getElementById('summaryQualityName');
+    var resumeQualitePrix    = document.getElementById('summaryQualityPrice');
+    var resumeOptionsListe   = document.getElementById('summaryOptionsList');
+    var resumeOptionsSection = document.getElementById('summaryOptionsSection');
+    var resumeTotal          = document.getElementById('summaryTotal');
+    var compteurBoutique     = document.getElementById('boutiqueCount');
 
-  /* Quality labels map */
-  const qualityLabels = {
-    hd:  'HD (720p)',
-    fhd: 'Full HD (1080p)',
-    '4k':'4K Ultra HD (2160p)',
-  };
+    // Noms lisibles pour le résumé
+    var nomsQualite = {
+        'starter': 'Starter',
+        'gamer':   'Gamer',
+        'ultra':   'Ultra'
+    };
 
-  /* Option labels map */
-  const optionLabels = {
-    raytracing:  'Ray Tracing',
-    savecloud:   'Sauvegardes illimitées',
-    support:     'Support prioritaire',
-    multidevice: 'Multi-appareils',
-  };
+    var nomsOptions = {
+        'raytracing':  'Ray Tracing',
+        'savecloud':   'Cloud illimité',
+        'support':     'Support 24/7',
+        'multidevice': 'Multi-appareils'
+    };
 
-  /* ── Format price ─────────────────────────────────────────── */
-  function fmt(num) {
-    return num.toFixed(2).replace('.', ',') + ' €';
-  }
-
-  /* ── Recalculate & update sidebar ────────────────────────── */
-  function update() {
-    /* Genres */
-    const selectedGenres = [...genreCheckboxes]
-      .filter(cb => cb.checked)
-      .map(cb => cb.value);
-
-    if (selectedGenres.length === 0) {
-      summaryGenres.innerHTML = '<span class="summary-empty">Aucun genre sélectionné</span>';
-    } else {
-      summaryGenres.innerHTML = selectedGenres
-        .map(g => `<span class="summary-genre-pill">${capitalise(g)}</span>`)
-        .join('');
+    function formaterPrix(n) {
+        return n.toFixed(2).replace('.', ',') + ' €';
     }
 
-    /* Quality */
-    const activeQuality = document.querySelector('.quality-radio:checked');
-    const qualityPrice  = activeQuality ? parseFloat(activeQuality.dataset.price) : 9.99;
-    const qualityId     = activeQuality ? activeQuality.value : 'fhd';
+    // Met à jour le résumé et le total affiché
+    function mettreAJour() {
 
-    summaryQualityName.textContent  = qualityLabels[qualityId] ?? qualityId;
-    summaryQualityPrice.textContent = fmt(qualityPrice);
+        // Boutique : articles cochés
+        var articlesCochesCases = [];
+        for (var i = 0; i < boutiqueCases.length; i++) {
+            if (boutiqueCases[i].checked) articlesCochesCases.push(boutiqueCases[i]);
+        }
 
-    /* Options */
-    const selectedOptions = [...optionCheckboxes].filter(cb => cb.checked);
-    let optionsTotal = 0;
+        var totalBoutique = 0;
+        var nb = articlesCochesCases.length;
 
-    if (selectedOptions.length === 0) {
-      summaryOptionsSection.style.display = 'none';
-      summaryOptionsList.innerHTML = '';
-    } else {
-      summaryOptionsSection.style.display = '';
-      summaryOptionsList.innerHTML = selectedOptions.map(cb => {
-        const price = parseFloat(cb.dataset.price);
-        optionsTotal += price;
-        const label = optionLabels[cb.value] ?? cb.value;
-        return `<div class="summary-line">
-          <span>${label}</span>
-          <span>+${fmt(price)}</span>
-        </div>`;
-      }).join('');
+        if (compteurBoutique) {
+            compteurBoutique.textContent = nb === 0 ? '0 article' : nb + ' article' + (nb > 1 ? 's' : '');
+        }
+
+        if (nb === 0) {
+            resumeBoutique.innerHTML = '<span class="summary-empty">Aucun article</span>';
+        } else {
+            var htmlBoutique = '';
+            for (var j = 0; j < articlesCochesCases.length; j++) {
+                var prix = parseFloat(articlesCochesCases[j].dataset.price);
+                totalBoutique += prix;
+                htmlBoutique +=
+                    '<div class="summary-line">' +
+                        '<span class="summary-line-name">' + articlesCochesCases[j].dataset.label + '</span>' +
+                        '<span class="summary-line-price">+' + formaterPrix(prix) + '</span>' +
+                    '</div>';
+            }
+            resumeBoutique.innerHTML = htmlBoutique;
+        }
+
+        // Qualité : radio sélectionné
+        var qualiteActive = null;
+        for (var k = 0; k < qualiteRadios.length; k++) {
+            if (qualiteRadios[k].checked) {
+                qualiteActive = qualiteRadios[k];
+                break;
+            }
+        }
+
+        var prixQualite = qualiteActive ? parseFloat(qualiteActive.dataset.price) : 24.99;
+        var idQualite   = qualiteActive ? qualiteActive.value : 'gamer';
+
+        resumeQualiteNom.textContent  = nomsQualite[idQualite] ? nomsQualite[idQualite] : idQualite;
+        resumeQualitePrix.textContent = formaterPrix(prixQualite);
+
+        // Options cochées
+        var optionsCochees = [];
+        for (var l = 0; l < optionCases.length; l++) {
+            if (optionCases[l].checked) optionsCochees.push(optionCases[l]);
+        }
+
+        var totalOptions = 0;
+
+        if (optionsCochees.length === 0) {
+            resumeOptionsSection.style.display = 'none';
+            resumeOptionsListe.innerHTML = '';
+        } else {
+            resumeOptionsSection.style.display = '';
+            var htmlOptions = '';
+            for (var m = 0; m < optionsCochees.length; m++) {
+                var prixOpt = parseFloat(optionsCochees[m].dataset.price);
+                totalOptions += prixOpt;
+                var nomOpt = nomsOptions[optionsCochees[m].value] ? nomsOptions[optionsCochees[m].value] : optionsCochees[m].value;
+                htmlOptions +=
+                    '<div class="summary-line">' +
+                        '<span class="summary-line-name">' + nomOpt + '</span>' +
+                        '<span class="summary-line-price">+' + formaterPrix(prixOpt) + '</span>' +
+                    '</div>';
+            }
+            resumeOptionsListe.innerHTML = htmlOptions;
+        }
+
+        // Total final
+        var total = prixQualite + totalOptions + totalBoutique;
+        resumeTotal.textContent = formaterPrix(total);
+
+        // Petite animation pour signaler le changement de prix
+        resumeTotal.classList.remove('price-bump');
+        resumeTotal.classList.add('price-bump');
     }
 
-    /* Total */
-    const total = qualityPrice + optionsTotal;
-    summaryTotal.textContent = fmt(total);
+    // Cocher/décocher un article boutique met à jour la carte correspondante
+    for (var i = 0; i < boutiqueCases.length; i++) {
+        boutiqueCases[i].addEventListener('change', function() {
+            for (var j = 0; j < boutiqueCases.length; j++) {
+                boutiqueCartes[j].classList.toggle('selected', boutiqueCases[j].checked);
+            }
+            mettreAJour();
+        });
+    }
 
-    /* Animate total */
-    summaryTotal.classList.remove('price-bump');
-    void summaryTotal.offsetWidth; // reflow
-    summaryTotal.classList.add('price-bump');
-  }
+    // Changer la qualité
+    for (var k = 0; k < qualiteRadios.length; k++) {
+        qualiteRadios[k].addEventListener('change', mettreAJour);
+    }
 
-  /* ── Chip toggle visual feedback ─────────────────────────── */
-  genreCheckboxes.forEach((cb, i) => {
-    cb.addEventListener('change', () => {
-      genreChips[i].classList.toggle('selected', cb.checked);
-      update();
-    });
-  });
+    // Cocher/décocher une option
+    for (var l = 0; l < optionCases.length; l++) {
+        optionCases[l].addEventListener('change', function() {
+            for (var m = 0; m < optionCases.length; m++) {
+                optionCartes[m].classList.toggle('selected', optionCases[m].checked);
+            }
+            mettreAJour();
+        });
+    }
 
-  /* ── Quality radio ────────────────────────────────────────── */
-  qualityRadios.forEach(radio => {
-    radio.addEventListener('change', update);
-  });
+    // Bouton "Commander" : construit l'URL panier avec les choix et redirige
+    var btnCommander = document.getElementById('cmdCommander');
+    if (btnCommander) {
+        btnCommander.addEventListener('click', function() {
+            var qualiteActive = null;
+            for (var i = 0; i < qualiteRadios.length; i++) {
+                if (qualiteRadios[i].checked) {
+                    qualiteActive = qualiteRadios[i];
+                    break;
+                }
+            }
 
-  /* ── Options checkboxes ───────────────────────────────────── */
-  optionCheckboxes.forEach(cb => {
-    cb.addEventListener('change', update);
-  });
+            var idFallback = parseInt(btnCommander.dataset.fallbackOffre, 10) || 0;
+            var idOffre    = qualiteActive ? parseInt(qualiteActive.dataset.dbId, 10) : 0;
+            if (!idOffre) idOffre = idFallback;
+            if (!idOffre) return;
 
-  /* ── Utilities ────────────────────────────────────────────── */
-  function capitalise(str) {
-    if (!str) return str;
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+            var url = '/NEBULA/panier.php?offre=' + idOffre;
 
-  /* ── Init: run once to set correct default state ─────────── */
-  update();
+            for (var j = 0; j < boutiqueCases.length; j++) {
+                if (boutiqueCases[j].checked && boutiqueCases[j].dataset.dbId) {
+                    url += '&produits[]=' + boutiqueCases[j].dataset.dbId;
+                }
+            }
 
-})();
+            window.location.href = url;
+        });
+    }
+
+    // Affichage initial au chargement de la page
+    mettreAJour();
+});

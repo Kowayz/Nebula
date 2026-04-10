@@ -21,7 +21,7 @@ require 'includes/header.php';
 
     <div class="feat-card">
       <div class="feat-icon-box">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="22" height="22" class="icon-img">
       </div>
       <h3 class="feat-card-title">Latence ultra-faible</h3>
       <p class="feat-card-desc">Notre réseau mondial de serveurs edge garantit une réactivité quasi-instantanée, identique à une console branchée en local.</p>
@@ -36,7 +36,7 @@ require 'includes/header.php';
 
     <div class="feat-card">
       <div class="feat-icon-box">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">
       </div>
       <h3 class="feat-card-title">4K · 144 FPS</h3>
       <p class="feat-card-desc">Vivez chaque image avec une précision absolue. Notre pipeline délivre la 4K Ultra HD à 144 images par seconde, sans compromis.</p>
@@ -51,7 +51,7 @@ require 'includes/header.php';
 
     <div class="feat-card">
       <div class="feat-icon-box">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/platforms/nintendo.png" alt="icon" width="24" height="24" class="platform-icon">
       </div>
       <h3 class="feat-card-title">Multi-appareils</h3>
       <p class="feat-card-desc">Commencez sur votre PC, reprenez sur votre smartphone. Zéro friction, reprise instantanée entre tous vos appareils.</p>
@@ -66,7 +66,7 @@ require 'includes/header.php';
 
     <div class="feat-card">
       <div class="feat-icon-box">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="20" height="20" class="icon-img">
       </div>
       <h3 class="feat-card-title">Sauvegardes cloud</h3>
       <p class="feat-card-desc">Vos progressions sont en sécurité, pour toujours. Sauvegardes automatiques, chaque quête accomplie, chaque record battu.</p>
@@ -81,7 +81,7 @@ require 'includes/header.php';
 
     <div class="feat-card">
       <div class="feat-icon-box">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 8h6M12 6v4"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="22" height="22" class="icon-img">
       </div>
       <h3 class="feat-card-title">Compatible manettes</h3>
       <p class="feat-card-desc">Jouez avec le périphérique que vous préférez. Nebula détecte automatiquement votre matériel et active les retours haptiques.</p>
@@ -96,7 +96,7 @@ require 'includes/header.php';
 
     <div class="feat-card">
       <div class="feat-icon-box">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <img src="/NEBULA/public/assets/img/icons/contact/document-legal.png" alt="icon" width="22" height="22" class="icon-img">
       </div>
       <h3 class="feat-card-title">Sans engagement</h3>
       <p class="feat-card-desc">Vous êtes libre. Aucun contrat, aucune surprise. Nebula mise sur la qualité pour vous garder, pas sur les contraintes.</p>
@@ -156,12 +156,12 @@ require 'includes/header.php';
   <div class="feat-tech-grid">
     <?php
     $techs = [
-      ['<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', 'Chiffrement TLS 1.3',  'Toutes les communications chiffrées de bout en bout'],
-      ['<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>', 'GPU NVIDIA A100', 'Cartes graphiques datacenter de dernière génération'],
-      ['<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', 'CDN Edge mondial',    'Routage intelligent vers le serveur le plus proche'],
-      ['<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l11 6 11-6"/><path d="M1 12l11 6 11-6"/></svg>', 'Protocole NebStream™', 'Codec vidéo propriétaire optimisé pour le jeu'],
-      ['<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>', 'Auto-scaling',        'Allocation dynamique des ressources selon la demande'],
-      ['<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>', 'Monitoring 24/7',     'Surveillance continue par notre équipe SRE'],
+      ['<img src="/NEBULA/public/assets/img/icons/ecommerce/bouclier-securite.png" alt="icon" width="14" height="14" class="icon-img">', 'Chiffrement TLS 1.3',  'Toutes les communications chiffrées de bout en bout'],
+      ['<img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="22" height="22" class="icon-img">', 'GPU NVIDIA A100', 'Cartes graphiques datacenter de dernière génération'],
+      ['<img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="20" height="20" class="icon-img">', 'CDN Edge mondial',    'Routage intelligent vers le serveur le plus proche'],
+      ['<img src="/NEBULA/public/assets/img/icons/ecommerce/serveur.png" alt="icon" width="20" height="20" class="icon-img">', 'Protocole NebStream™', 'Codec vidéo propriétaire optimisé pour le jeu'],
+      ['<img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">', 'Auto-scaling',        'Allocation dynamique des ressources selon la demande'],
+      ['<img src="/NEBULA/public/assets/img/icons/nav/fleche-droite.png" alt="icon" width="20" height="20" class="icon-img">', 'Monitoring 24/7',     'Surveillance continue par notre équipe SRE'],
     ];
     foreach ($techs as [$icon, $name, $desc]): ?>
     <div class="feat-tech-card">
