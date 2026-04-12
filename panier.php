@@ -78,6 +78,72 @@ if (isset($_GET['vider'])) {
     exit;
 }
 
+// -- PAYER via Stripe Checkout --
+// Quand l'utilisateur clique sur "Payer avec Stripe", on :
+//   1. Lit la clé secrète Stripe depuis .env.local
+//   2. Calcule le total TTC du panier
+//   3. Envoie une requête cURL à l'API Stripe pour créer une "session Checkout"
+//   4. Redirige l'utilisateur vers la page de paiement hébergée par Stripe
+// Stripe gère tout le formulaire de carte bancaire de son côté.
+// En mode test, on utilise la carte fictive 4242 4242 4242 4242.
+if (isset($_GET['payer']) && !empty($_SESSION['user_id'])) {
+
+    // Lire le fichier .env.local pour récupérer STRIPE_SECRET_KEY
+    // (même méthode que pour les clés IGDB dans api/igdb.php)
+    $envPath = __DIR__ . '/.env.local';
+    foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        if (strpos($line, '=') && $line[0] !== '#') {
+            [$k, $v] = explode('=', $line, 2);
+            $env[trim($k)] = trim($v);
+        }
+    }
+
+    // Récupérer les articles du panier et calculer le total
+    $items = $pdo->query("SELECT prix, quantite FROM panier WHERE user_id = $userId")->fetchAll();
+    $total = 0;
+    foreach ($items as $i) $total += $i['prix'] * $i['quantite'];
+
+    // Convertir en centimes TTC (Stripe attend des centimes, pas des euros)
+    // Exemple : 29.99€ HT × 1.20 (TVA 20%) = 35.988€ TTC = 3599 centimes
+    $totalCents = (int)round($total * 1.20 * 100);
+
+    // Appel cURL vers l'API Stripe pour créer la session de paiement
+    // Documentation : https://docs.stripe.com/api/checkout/sessions/create
+    $ch = curl_init('https://api.stripe.com/v1/checkout/sessions');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  // Récupérer la réponse au lieu de l'afficher
+    curl_setopt($ch, CURLOPT_POST, true);             // Requête POST
+    curl_setopt($ch, CURLOPT_USERPWD, $env['STRIPE_SECRET_KEY'] . ':'); // Authentification HTTP Basic
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+        'payment_method_types' => ['card'],                    // Paiement par carte uniquement
+        'line_items' => [[                                     // Un seul article : le total de la commande
+            'price_data' => [
+                'currency' => 'eur',                           // Devise : euros
+                'product_data' => ['name' => 'Commande Nebula'], // Nom affiché sur la page Stripe
+                'unit_amount' => $totalCents,                  // Montant en centimes
+            ],
+            'quantity' => 1,
+        ]],
+        'mode' => 'payment',                                   // Paiement unique (pas abonnement)
+        'success_url' => 'http://localhost/NEBULA/panier.php?paid=1', // Redirection si paiement OK
+        'cancel_url'  => 'http://localhost/NEBULA/panier.php',        // Redirection si annulé
+    ]));
+    $session = json_decode(curl_exec($ch), true);  // Décoder la réponse JSON de Stripe
+    curl_close($ch);
+
+    // Stripe renvoie une URL de paiement → on redirige l'utilisateur dessus
+    if (!empty($session['url'])) {
+        header('Location: ' . $session['url']);
+        exit;
+    }
+}
+
+// -- ACTION : Retour après paiement réussi (?paid=1) --
+// Stripe redirige ici après un paiement validé → on vide le panier
+if (isset($_GET['paid']) && !empty($_SESSION['user_id'])) {
+    $pdo->query("DELETE FROM panier WHERE user_id = $userId");
+    $paymentSuccess = true;
+}
+
 // -- Récupérer les articles du panier depuis la BDD (si connecté) --
 if (!empty($_SESSION['user_id'])) {
     $panier = $pdo->query("SELECT * FROM panier WHERE user_id = $userId ORDER BY date_ajout DESC")->fetchAll();
@@ -117,7 +183,19 @@ require 'includes/header.php';
     </div>
   </div>
 
-<!-- État 2 : Panier vide → message + liens vers boutique/jeux -->
+<!-- État 2a : Paiement réussi → message de confirmation -->
+<?php elseif (!empty($paymentSuccess)): ?>
+  <div class='cart-empty'>
+    <div class='cart-empty-icon'><img src='/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png' alt='Succès' width='64' height='64'></div>
+    <h2 class='cart-empty-title'>Paiement réussi !</h2>
+    <p class='cart-empty-sub'>Merci pour votre achat. Votre commande a bien été enregistrée.</p>
+    <div class='cart-empty-actions'>
+      <a href='/NEBULA/jeux.php' class='btn btn-primary'>Parcourir les jeux</a>
+      <a href='/NEBULA/dashboard.php' class='btn btn-outline'>Mon espace</a>
+    </div>
+  </div>
+
+<!-- État 2b : Panier vide → message + liens vers boutique/jeux -->
 <?php elseif (empty($panier)): ?>
   <div class='cart-empty'>
     <div class='cart-empty-icon'><img src='/NEBULA/public/assets/img/icons/ecommerce/cadille.png' alt='Panier vide' width='64' height='64'></div>
@@ -159,7 +237,7 @@ require 'includes/header.php';
       <p>Sous-total: <?= number_format($sousTotal, 2) ?> €</p>
       <p>TVA (20%): <?= number_format($tva, 2) ?> €</p>
       <p><strong>Total: <?= number_format($total, 2) ?> €</strong></p>
-      <a href='panier.php?vider=1' class='btn btn-primary'>Payer</a>
+      <a href='panier.php?payer=1' class='btn btn-primary'>Payer avec Stripe</a>
     </div>
   </div>
 <?php endif; ?>
