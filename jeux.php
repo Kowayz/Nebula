@@ -11,11 +11,18 @@ $pageTitle = 'Bibliothèque de jeux';
 $pageCSS   = ['jeux'];
 $pageJS    = [];
 
-// -- Charger l'API IGDB --
-require_once 'api/igdb.php';
-
-// -- Récupérer 120 jeux depuis l'API pour avoir 30 de chaque catégorie --
-$games = igdb_get_games(120);
+// -- Charger les jeux depuis la BDD --
+require_once 'includes/db.php';
+$pdo   = getPDO();
+$stmt  = $pdo->query('SELECT igdb_id, titre, image_url FROM jeu WHERE igdb_id IS NOT NULL ORDER BY id_jeu');
+$games = [];
+foreach ($stmt->fetchAll() as $row) {
+    $games[] = [
+        'id_jeu'    => $row['igdb_id'],
+        'titre'     => $row['titre'],
+        'image_url' => $row['image_url'] ?? '',
+    ];
+}
 
 // -- Séparer les jeux : ID impair = inclus, ID pair = à acheter --
 $jeuxInclus = [];
@@ -79,7 +86,7 @@ require 'includes/header.php';
       </div>
       <div class="catalogue-card-overlay">
         <div class="catalogue-card-title"><?= htmlspecialchars($g['titre']) ?></div>
-        <div class="catalogue-play-btn">Jouer</div>
+        <div class="btn btn-primary btn-full">Jouer</div>
       </div>
       <!-- Badge "Inclus" en haut de la carte -->
       <div class="catalogue-included-badge">Inclus</div>
@@ -121,7 +128,7 @@ require 'includes/header.php';
       </div>
       <div class="catalogue-card-overlay">
         <div class="catalogue-card-title"><?= htmlspecialchars($g['titre']) ?></div>
-        <div class="catalogue-buy-btn">Acheter</div>
+        <div class="btn btn-danger btn-full">Acheter</div>
       </div>
     </a>
     <?php endforeach; ?>

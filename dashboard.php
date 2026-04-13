@@ -204,7 +204,7 @@ require 'includes/header.php';
             <div class="db-plan-price">44,99<span> €/mois</span></div>
             <div class="db-plan-date">Actif depuis le 15/03/2024</div>
           </div>
-          <a href="/NEBULA/offres.php" class="btn btn-outline btn-full btn-sm">Changer d'offre</a>
+          <a href="/NEBULA/offres.php" class="btn btn-primary btn-full">Changer d'offre</a>
         </div>
 
         <!-- Carte : Liens d'accès rapide vers les pages principales -->

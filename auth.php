@@ -23,10 +23,10 @@ $tab = $_GET['tab'] ?? 'login'; // Onglet actif : "login" ou "register"
 // -- Traitement du formulaire de CONNEXION --
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'login') {
     // Vérifier email + mot de passe dans la table utilisateur
-    $stmt = $pdo->prepare('SELECT id_user, nom FROM utilisateur WHERE email = ? AND password = ?');
-    $stmt->execute([$_POST['email'], $_POST['password']]);
+    $stmt = $pdo->prepare('SELECT id_user, nom, password FROM utilisateur WHERE email = ?');
+    $stmt->execute([$_POST['email']]);
     $user = $stmt->fetch();
-    if ($user) {
+    if ($user && password_verify($_POST['password'], $user['password'])) {
         // Stocker l'utilisateur en session et rediriger
         $_SESSION['user_id'] = $user['id_user'];
         $_SESSION['user_nom'] = $user['nom'];
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'login') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'register') {
     try {
         $stmt = $pdo->prepare('INSERT INTO utilisateur (nom, email, password) VALUES (?, ?, ?)');
-        $stmt->execute([$_POST['nom'], $_POST['email'], $_POST['password']]);
+        $stmt->execute([$_POST['nom'], $_POST['email'], password_hash($_POST['password'], PASSWORD_BCRYPT)]);
         $_SESSION['user_id'] = $pdo->lastInsertId();
         $_SESSION['user_nom'] = $_POST['nom'];
         header('Location: dashboard.php');
@@ -83,7 +83,7 @@ require 'includes/header.php';
     <?php if ($error): ?><p style='color:red'><?= $error ?></p><?php endif; ?>
     <form method='POST'>
       <input type='hidden' name='action' value='register'>
-      <div class='input-box'><img src='/NEBULA/public/assets/img/icons/dashboard/utilisateur.png' class='input-img'><input type='text' name='nom' placeholder='Nom' required></div>
+      <div class='input-box'><img src='/NEBULA/public/assets/img/icons/dashboard/utilisateur.png' class='input-img'><input type='text' name='nom' placeholder='Nom' oninput="this.value=this.value.replace(/\d/g,'')" required></div>
       <div class='input-box'><img src='/NEBULA/public/assets/img/icons/contact/email.png' class='input-img'><input type='email' name='email' placeholder='Email' required></div>
       <div class='input-box'><img src='/NEBULA/public/assets/img/icons/dashboard/cadenas.png' class='input-img'><input type='password' name='password' placeholder='Mot de passe' required></div>
       <p><button type='submit' class='btn btn-primary'>Créer compte</button></p>

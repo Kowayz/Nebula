@@ -243,38 +243,61 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Violet dégradé (action principale) */
 .btn-primary {
-  background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
-  color: #fff;
+  background: linear-gradient(135deg, rgba(76, 29, 149, 0.35) 0%, rgba(109, 40, 217, 0.42) 100%);
+  color: var(--text);
+  border: 1px solid rgba(124, 58, 237, 0.45);
 }
-.btn-primary:hover { filter: brightness(1.12); transform: translateY(-2px); }
+.btn-primary:hover {
+  background: linear-gradient(135deg, rgba(76, 29, 149, 0.92) 0%, rgba(124, 58, 237, 0.96) 100%);
+  border-color: rgba(167, 139, 250, 0.9);
+  color: var(--text);
+  transform: translateY(-1px);
+}
 .btn-primary:active { transform: translateY(0); }
 
 /* Contour transparent */
 .btn-outline {
-  background: rgba(255,255,255,.04);
+  background: linear-gradient(135deg, rgba(15, 8, 28, 0.35) 0%, rgba(8, 4, 18, 0.42) 100%);
   color: var(--text);
-  border: 1.5px solid rgba(255,255,255,.2);
+  border: 1px solid rgba(255, 255, 255, 0.16);
 }
+/* hover bouton contour */
 .btn-outline:hover {
-  background: rgba(124,58,237,.1);
-  border-color: rgba(167,139,250,.6);
-  color: var(--highlight);
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.92) 0%, rgba(109, 40, 217, 0.96) 100%);
+  border-color: rgba(124, 58, 237, 0.24);
+  color: var(--text);
+  transform: translateY(-1px);
 }
 
 /* Transparent sans bordure */
 .btn-ghost { background: transparent; color: var(--text-gray); }
 .btn-ghost:hover { color: var(--text); }
 
-/* Rouge dégradé (suppression) */
-.btn-danger { background: linear-gradient(135deg, #f87171, #dc2626); color: #fff; }
-.btn-danger:hover { filter: brightness(1.12); }
-
-/* Rose dégradé (appel à l'action fort) */
-.btn-cta {
-  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
-  color: #fff;
+/* Rouge sombre (suppression) */
+.btn-danger {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.35) 0%, rgba(185, 28, 28, 0.42) 100%);
+  color: var(--text);
+  border: 1px solid rgba(239, 68, 68, 0.7);
 }
-.btn-cta:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.btn-danger:hover {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.82) 0%, rgba(185, 28, 28, 0.82) 100%);
+  border-color: rgba(248, 113, 113, 0.9);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+/* Rose sombre (appel à l'action fort) */
+.btn-cta {
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.38) 0%, rgba(244, 63, 94, 0.44) 100%);
+  color: var(--text);
+  border: 1px solid rgba(244, 63, 94, 0.7);
+}
+.btn-cta:hover {
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.52) 0%, rgba(244, 63, 94, 0.58) 100%);
+  border-color: rgba(251, 113, 133, 0.9);
+  color: #fda4af;
+  transform: translateY(-1px);
+}
 .btn-cta:active { transform: translateY(0); }
 
 /* Tailles de boutons */

@@ -4,8 +4,13 @@ $pageTitle = 'Jouez à vos jeux n\'importe où';
 $pageCSS   = ['index', 'jeux'];
 $pageJS    = [];
 
-require_once 'api/igdb.php';
-$topGames = igdb_get_trending_games(5);
+require_once 'includes/db.php';
+$pdo      = getPDO();
+$stmt     = $pdo->query('SELECT igdb_id, titre, image_url FROM jeu WHERE igdb_id IS NOT NULL ORDER BY rating DESC LIMIT 5');
+$topGames = [];
+foreach ($stmt->fetchAll() as $row) {
+    $topGames[] = ['id_jeu' => $row['igdb_id'], 'titre' => $row['titre'], 'image_url' => $row['image_url'] ?? ''];
+}
 
 require 'includes/header.php';
 ?>

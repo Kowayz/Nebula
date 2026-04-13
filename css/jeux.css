@@ -184,38 +184,3 @@
   margin: 0 0 6px;
   line-height: 1.25;
 }
-
-/* ----------------------------------------------------------
-   6. BOUTONS
-   ---------------------------------------------------------- */
-
-/* Bouton violet "Jouer" */
-.catalogue-play-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 8px 18px;
-  background: linear-gradient(135deg, var(--main-dark), var(--main));
-  color: #fff;
-  font-size: .74rem;
-  font-weight: 700;
-  border-radius: 20px;
-  text-transform: uppercase;
-  font-family: var(--font-title);
-}
-
-/* Bouton rouge "Acheter" */
-.catalogue-buy-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 18px;
-  background: linear-gradient(135deg, #dc2626, #991b1b);
-  color: #fff;
-  font-size: .74rem;
-  font-weight: 700;
-  border-radius: 20px;
-  text-transform: uppercase;
-  font-family: var(--font-title);
-}

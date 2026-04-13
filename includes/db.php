@@ -23,7 +23,7 @@ function getPDO(): PDO {
         } catch (PDOException $e) {
             // En production, logger l'erreur sans l'afficher
             error_log('DB connection failed: ' . $e->getMessage());
-            die('Erreur de connexion à la base de données.');
+            throw $e;
         }
     }
     return $pdo;

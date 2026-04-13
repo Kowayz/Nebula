@@ -10,6 +10,14 @@ $pageTitle = 'Nos offres';
 $pageCSS   = ['offres'];
 $pageJS    = [];
 
+// -- Charger les offres depuis la BDD --
+require 'includes/db.php';
+$pdo = getPDO();
+$offres = [];
+foreach ($pdo->query('SELECT id_offre, nom_offre, prix_mensuel FROM offre ORDER BY prix_mensuel ASC')->fetchAll() as $o) {
+    $offres[$o['nom_offre']] = $o;
+}
+
 // -- Inclure le header commun --
 require 'includes/header.php';
 ?>
@@ -42,6 +50,7 @@ require 'includes/header.php';
         <li class="pricing-feature"><img src="/NEBULA/public/assets/img/icons/nav/croix-fermer.png" alt="icon" width="14" height="14" class="icon-img"> Support 24/7</li>
       </ul>
       <a href="/NEBULA/auth.php?tab=register" class="btn btn-outline btn-full">Commencer gratuitement</a>
+      <?php /* Starter : gratuit, pas d'ajout au panier */ ?>
     </div>
 
     <!-- Gamer : offre populaire (mise en avant) -->
@@ -61,7 +70,7 @@ require 'includes/header.php';
         <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Sauvegardes illimitées</li>
         <li class="pricing-feature"><img src="/NEBULA/public/assets/img/icons/nav/croix-fermer.png" alt="icon" width="14" height="14" class="icon-img"> Support prioritaire</li>
       </ul>
-      <a href="/NEBULA/panier.php?add=200&amp;nom=Offre+Gamer+(mensuel)&amp;prix=24.99&amp;cat=offre" class="btn btn-primary btn-full">S'abonner</a>
+      <a href="/NEBULA/panier.php?add=<?= $offres['Gamer']['id_offre'] ?>&nom=Offre+Gamer&prix=<?= $offres['Gamer']['prix_mensuel'] ?>&cat=offre" class="btn btn-primary btn-full">S'abonner</a>
     </div>
 
     <!-- Ultra : offre premium complète -->
@@ -80,7 +89,7 @@ require 'includes/header.php';
         <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Cadeaux exclusifs</li>
         <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Support prioritaire</li>
       </ul>
-      <a href="/NEBULA/panier.php?add=201&amp;nom=Offre+Ultra+(mensuel)&amp;prix=44.99&amp;cat=offre" class="btn btn-outline btn-full">S'abonner</a>
+      <a href="/NEBULA/panier.php?add=<?= $offres['Ultra']['id_offre'] ?>&nom=Offre+Ultra&prix=<?= $offres['Ultra']['prix_mensuel'] ?>&cat=offre" class="btn btn-outline btn-full">S'abonner</a>
     </div>
 
   </div>

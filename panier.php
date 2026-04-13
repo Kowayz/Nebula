@@ -30,26 +30,27 @@ if (isset($_GET['add'])) {
     }
     
     // Récupérer les infos de l'article depuis l'URL
-    $jeuId = (int)$_GET['add'];
-    $nom = $_GET['nom'] ?? 'Article';
-    $prix = (float)($_GET['prix'] ?? 0);
-    $categorie = $_GET['cat'] ?? 'jeu';
+    $idRef = (int)$_GET['add'];
+    $nom   = $_GET['nom'] ?? 'Article';
+    $prix  = (float)($_GET['prix'] ?? 0);
+    $cat   = $_GET['cat'] ?? 'jeu';
+    $type  = ($cat === 'boutique') ? 'produit' : $cat; // boutique → produit
     
     // Vérifier si l'article existe déjà dans le panier
-    $exist = $pdo->query("SELECT id, quantite, categorie FROM panier WHERE jeu_id = $jeuId AND user_id = $userId")->fetch();
+    $stmt = $pdo->prepare('SELECT id_panier, quantite, type FROM panier WHERE id_ref = ? AND id_user = ? AND type = ?');
+    $stmt->execute([$idRef, $userId, $type]);
+    $exist = $stmt->fetch();
     
     if ($exist) {
         // Produit boutique : augmenter la quantité (+1)
-        if ($exist['categorie'] === 'boutique') {
-            $newQty = $exist['quantite'] + 1;
-            $pdo->query("UPDATE panier SET quantite = $newQty WHERE id = {$exist['id']}");
+        if ($exist['type'] === 'produit') {
+            $stmt = $pdo->prepare('UPDATE panier SET quantite = quantite + 1 WHERE id_panier = ?');
+            $stmt->execute([$exist['id_panier']]);
         }
-        // Jeu : ne pas ajouter de doublon (on ignore)
+        // Offre / jeu : ne pas dupliquer
     } else {
-        // Insérer un nouvel article dans le panier
-        $qty = 1;
-        $pdo->query("INSERT INTO panier (user_id, jeu_id, nom, prix, quantite, categorie) 
-                     VALUES ($userId, $jeuId, '$nom', $prix, $qty, '$categorie')");
+        $stmt = $pdo->prepare('INSERT INTO panier (id_user, type, id_ref, nom, prix, quantite) VALUES (?, ?, ?, ?, ?, 1)');
+        $stmt->execute([$userId, $type, $idRef, $nom, $prix]);
     }
     header('Location: panier.php');
     exit;
@@ -61,8 +62,9 @@ if (isset($_GET['remove'])) {
         header('Location: /NEBULA/auth.php?tab=login');
         exit;
     }
-    $jeuId = (int)$_GET['remove'];
-    $pdo->query("DELETE FROM panier WHERE jeu_id = $jeuId AND user_id = $userId");
+    $idPanier = (int)$_GET['remove'];
+    $stmt = $pdo->prepare('DELETE FROM panier WHERE id_panier = ? AND id_user = ?');
+    $stmt->execute([$idPanier, $userId]);
     header('Location: panier.php');
     exit;
 }
@@ -73,7 +75,8 @@ if (isset($_GET['vider'])) {
         header('Location: /NEBULA/auth.php?tab=login');
         exit;
     }
-    $pdo->query("DELETE FROM panier WHERE user_id = $userId");
+    $stmt = $pdo->prepare('DELETE FROM panier WHERE id_user = ?');
+    $stmt->execute([$userId]);
     header('Location: panier.php');
     exit;
 }
@@ -99,7 +102,9 @@ if (isset($_GET['payer']) && !empty($_SESSION['user_id'])) {
     }
 
     // Récupérer les articles du panier et calculer le total
-    $items = $pdo->query("SELECT prix, quantite FROM panier WHERE user_id = $userId")->fetchAll();
+    $stmt = $pdo->prepare('SELECT prix, quantite FROM panier WHERE id_user = ?');
+    $stmt->execute([$userId]);
+    $items = $stmt->fetchAll();
     $total = 0;
     foreach ($items as $i) $total += $i['prix'] * $i['quantite'];
 
@@ -140,13 +145,16 @@ if (isset($_GET['payer']) && !empty($_SESSION['user_id'])) {
 // -- ACTION : Retour après paiement réussi (?paid=1) --
 // Stripe redirige ici après un paiement validé → on vide le panier
 if (isset($_GET['paid']) && !empty($_SESSION['user_id'])) {
-    $pdo->query("DELETE FROM panier WHERE user_id = $userId");
+    $stmt = $pdo->prepare('DELETE FROM panier WHERE id_user = ?');
+    $stmt->execute([$userId]);
     $paymentSuccess = true;
 }
 
 // -- Récupérer les articles du panier depuis la BDD (si connecté) --
 if (!empty($_SESSION['user_id'])) {
-    $panier = $pdo->query("SELECT * FROM panier WHERE user_id = $userId ORDER BY date_ajout DESC")->fetchAll();
+    $stmt = $pdo->prepare('SELECT * FROM panier WHERE id_user = ? ORDER BY date_ajout DESC');
+    $stmt->execute([$userId]);
+    $panier = $stmt->fetchAll();
 } else {
     $panier = [];
 }
@@ -220,11 +228,11 @@ require 'includes/header.php';
           </div>
           <div class='cart-item-actions'>
             <!-- Afficher la quantité si > 1 (produits boutique) -->
-            <?php if ($item['categorie'] === 'boutique' && $item['quantite'] > 1): ?>
+            <?php if ($item['type'] === 'produit' && $item['quantite'] > 1): ?>
               <span>x<?= $item['quantite'] ?></span>
             <?php endif; ?>
             <p class='cart-item-total'><?= number_format($item['prix'] * $item['quantite'], 2) ?> €</p>
-            <a href='?remove=<?= $item['jeu_id'] ?>' class='cart-remove' title='Supprimer'>
+            <a href='?remove=<?= $item['id_panier'] ?>' class='cart-remove' title='Supprimer'>
               <img src='/NEBULA/public/assets/img/icons/ecommerce/poubelle.png' alt='Supprimer' width='18' height='18'>
             </a>
           </div>

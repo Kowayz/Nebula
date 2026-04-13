@@ -6,8 +6,8 @@
    Le jeu est récupéré via l'API IGDB grâce au paramètre ?id=.
    ============================================================ */
 
-// -- Charger l'API IGDB --
-require 'api/igdb.php';
+// -- Charger la BDD --
+require_once 'includes/db.php';
 
 // -- Récupérer l'ID du jeu depuis l'URL (?id=123) --
 $id  = (int)($_GET['id'] ?? 0);
@@ -31,18 +31,35 @@ $prixJeu = 39.99;
 
 // -- Si un ID valide est fourni, récupérer les données du jeu --
 if ($id > 0) {
-    $jeu = igdb_get_game($id);
-    
-    // Ajouter le type et le prix au jeu
-    if ($jeu) {
-        $jeu['type'] = $typeJeu;
-        $jeu['prix'] = ($typeJeu === 'premium') ? $prixJeu : 0;
+    $pdo  = getPDO();
+    $stmt = $pdo->prepare('SELECT * FROM jeu WHERE igdb_id = ? LIMIT 1');
+    $stmt->execute([$id]);
+    $row  = $stmt->fetch();
+
+    if ($row) {
+        $jeu = [
+            'id_jeu'      => $row['igdb_id'],
+            'titre'       => $row['titre'],
+            'description' => $row['description'] ?? '',
+            'image_url'   => $row['image_url'],
+            'cover_url'   => $row['image_url'],
+            'hero_url'    => $row['hero_url'] ?? null,
+            'screenshots' => json_decode($row['screenshots'] ?? 'null', true) ?? [],
+            'trailer_id'  => $row['trailer_id'] ?? null,
+            'rating'      => $row['rating'] ?? null,
+            'developpeur' => $row['developpeur'] ?? '',
+            'date_sortie' => $row['date_sortie'] ?? null,
+            'type'        => $typeJeu,
+            'prix'        => ($typeJeu === 'premium') ? $prixJeu : 0,
+        ];
     }
-    
-    // Jeux liés : récupérer 20 jeux, mélanger et en garder 7 au hasard
-    $games = igdb_get_games(20);
-    shuffle($games);
-    $related = array_slice($games, 0, 7);
+
+    // Jeux liés depuis la BDD
+    $relStmt = $pdo->prepare('SELECT igdb_id, titre, image_url FROM jeu WHERE igdb_id != ? ORDER BY RAND() LIMIT 7');
+    $relStmt->execute([$id]);
+    foreach ($relStmt->fetchAll() as $r) {
+        $related[] = ['id_jeu' => $r['igdb_id'], 'titre' => $r['titre'], 'image_url' => $r['image_url'] ?? ''];
+    }
 }
 
 // -- Formater la date de sortie en français (ex: "15 mars 2024") --

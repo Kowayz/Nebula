@@ -11,6 +11,16 @@ $pageTitle = 'Boutique';
 $pageCSS   = ['boutique'];
 $pageJS    = [];
 
+// -- Charger les produits depuis la BDD --
+require 'includes/db.php';
+$pdo = getPDO();
+$produits = $pdo->query('
+    SELECT p.id_produit, p.nom_produit, p.description, p.prix_unitaire, p.image_url, c.libelle AS categorie
+    FROM produit p
+    JOIN categorie c ON c.id_cat = p.id_cat
+    ORDER BY c.id_cat, p.id_produit
+')->fetchAll();
+
 // -- Inclure le header commun --
 require 'includes/header.php';
 ?>
@@ -44,101 +54,22 @@ require 'includes/header.php';
   </div>
 
   <div class="merch-grid">
-    <!-- T-Shirt -->
+    <?php foreach ($produits as $p): ?>
     <div class="merch-card">
       <div class="merch-img">
-        <img src="/NEBULA/public/assets/img/merch-tshirt.png" alt="T-Shirt Nebula">
+        <img src="<?= htmlspecialchars($p['image_url']) ?>" alt="<?= htmlspecialchars($p['nom_produit']) ?>">
       </div>
       <div class="merch-body">
-        <div class="merch-category">Vêtement</div>
-        <div class="merch-name">T-Shirt Nebula</div>
-        <div class="merch-desc">100% coton · Noir · Logo violet</div>
+        <div class="merch-category"><?= htmlspecialchars($p['categorie']) ?></div>
+        <div class="merch-name"><?= htmlspecialchars($p['nom_produit']) ?></div>
+        <div class="merch-desc"><?= htmlspecialchars($p['description']) ?></div>
         <div class="merch-footer">
-          <div class="merch-price">29,99 €</div>
-          <a href="/NEBULA/panier.php?add=1&amp;cat=boutique&amp;nom=T-Shirt+Nebula&amp;prix=29.99" class="btn btn-outline btn-sm">Ajouter</a>
+          <div class="merch-price"><?= number_format($p['prix_unitaire'], 2, ',', ' ') ?> €</div>
+          <a href="/NEBULA/panier.php?add=<?= $p['id_produit'] ?>&cat=boutique&nom=<?= urlencode($p['nom_produit']) ?>&prix=<?= $p['prix_unitaire'] ?>" class="btn btn-outline btn-sm">Ajouter</a>
         </div>
       </div>
     </div>
-
-    <!-- Hoodie -->
-    <div class="merch-card">
-      <div class="merch-img">
-        <img src="/NEBULA/public/assets/img/merch-hoodie.png" alt="Hoodie Nebula">
-      </div>
-      <div class="merch-body">
-        <div class="merch-category">Vêtement</div>
-        <div class="merch-name">Hoodie Nebula</div>
-        <div class="merch-desc">Coton doux · Poche kangourou · Unisexe</div>
-        <div class="merch-footer">
-          <div class="merch-price">49,99 €</div>
-          <a href="/NEBULA/panier.php?add=2&amp;cat=boutique&amp;nom=Hoodie+Nebula&amp;prix=49.99" class="btn btn-primary btn-sm">Ajouter</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mug -->
-    <div class="merch-card">
-      <div class="merch-img">
-        <img src="/NEBULA/public/assets/img/merch-mug.png" alt="Mug Gaming">
-      </div>
-      <div class="merch-body">
-        <div class="merch-category">Accessoire</div>
-        <div class="merch-name">Mug Gaming</div>
-        <div class="merch-desc">Céramique · 350ml · Thermosensible</div>
-        <div class="merch-footer">
-          <div class="merch-price">14,99 €</div>
-          <a href="/NEBULA/panier.php?add=3&amp;cat=boutique&amp;nom=Mug+Gaming&amp;prix=14.99" class="btn btn-outline btn-sm">Ajouter</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Casquette -->
-    <div class="merch-card">
-      <div class="merch-img">
-        <img src="/NEBULA/public/assets/img/merch-casquette.png" alt="Casquette Nebula">
-      </div>
-      <div class="merch-body">
-        <div class="merch-category">Vêtement</div>
-        <div class="merch-name">Casquette Nebula</div>
-        <div class="merch-desc">Snapback · Brodé · Réglable</div>
-        <div class="merch-footer">
-          <div class="merch-price">24,99 €</div>
-          <a href="/NEBULA/panier.php?add=4&amp;cat=boutique&amp;nom=Casquette+Nebula&amp;prix=24.99" class="btn btn-outline btn-sm">Ajouter</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mousepad -->
-    <div class="merch-card">
-      <div class="merch-img">
-        <img src="/NEBULA/public/assets/img/merch-mousepad.png" alt="Mousepad XXL">
-      </div>
-      <div class="merch-body">
-        <div class="merch-category">Accessoire</div>
-        <div class="merch-name">Mousepad XXL</div>
-        <div class="merch-desc">900x400mm · Surface lisse · Base antidérapante</div>
-        <div class="merch-footer">
-          <div class="merch-price">19,99 €</div>
-          <a href="/NEBULA/panier.php?add=5&amp;cat=boutique&amp;nom=Mousepad+XXL&amp;prix=19.99" class="btn btn-outline btn-sm">Ajouter</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Stickers -->
-    <div class="merch-card">
-      <div class="merch-img">
-        <img src="/NEBULA/public/assets/img/merch-stickers.png" alt="Pack Stickers">
-      </div>
-      <div class="merch-body">
-        <div class="merch-category">Accessoire</div>
-        <div class="merch-name">Pack Stickers</div>
-        <div class="merch-desc">15 stickers · Vinyle waterproof · Mix designs</div>
-        <div class="merch-footer">
-          <div class="merch-price">9,99 €</div>
-          <a href="/NEBULA/panier.php?add=6&amp;cat=boutique&amp;nom=Pack+Stickers&amp;prix=9.99" class="btn btn-outline btn-sm">Ajouter</a>
-        </div>
-      </div>
-    </div>
+    <?php endforeach; ?>
   </div>
 </div>
 
