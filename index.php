@@ -53,7 +53,7 @@ require 'includes/header.php';
       </div>
       <div class="catalogue-card-overlay">
         <div class="catalogue-card-title"><?= htmlspecialchars($game['titre']) ?></div>
-        <div class="catalogue-play-btn">Jouer</div>
+        <div class="btn btn-primary btn-full">Jouer</div>
       </div>
     </a>
     <?php endforeach; ?>

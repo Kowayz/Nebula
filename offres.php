@@ -50,7 +50,6 @@ require 'includes/header.php';
         <li class="pricing-feature"><img src="/NEBULA/public/assets/img/icons/nav/croix-fermer.png" alt="icon" width="14" height="14" class="icon-img"> Support 24/7</li>
       </ul>
       <a href="/NEBULA/auth.php?tab=register" class="btn btn-outline btn-full">Commencer gratuitement</a>
-      <?php /* Starter : gratuit, pas d'ajout au panier */ ?>
     </div>
 
     <!-- Gamer : offre populaire (mise en avant) -->
@@ -58,7 +57,7 @@ require 'includes/header.php';
       <div class="pricing-badge">Populaire</div>
       <div class="pricing-name">Gamer</div>
       <div class="pricing-price">
-        <span class="price-amount">24.99</span><span class="price-period"> €/mois</span>
+        <span class="price-amount"><?= number_format($offres['Gamer']['prix_mensuel'], 2) ?></span><span class="price-period"> €/mois</span>
       </div>
       <div class="pricing-sub">Pour les joueurs réguliers</div>
       <ul class="pricing-features">
@@ -77,7 +76,7 @@ require 'includes/header.php';
     <div class="pricing-card">
       <div class="pricing-name">Ultra</div>
       <div class="pricing-price">
-        <span class="price-amount">44.99</span><span class="price-period"> €/mois</span>
+        <span class="price-amount"><?= number_format($offres['Ultra']['prix_mensuel'], 2) ?></span><span class="price-period"> €/mois</span>
       </div>
       <div class="pricing-sub">L'expérience gaming ultime</div>
       <ul class="pricing-features">
@@ -85,7 +84,7 @@ require 'includes/header.php';
         <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Sessions prioritaires</li>
         <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Support 24/7</li>
         <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Accès anticipé aux nouveautés</li>
-        <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Streaming simultané (2 appareils)</li>
+        <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Streaming simultané</li>
         <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Cadeaux exclusifs</li>
         <li class="pricing-feature yes"><img src="/NEBULA/public/assets/img/icons/ecommerce/coche-incluse.png" alt="icon" width="14" height="14" class="icon-img"> Support prioritaire</li>
       </ul>

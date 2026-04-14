@@ -73,17 +73,6 @@
   border: 1px solid rgba(159,18,57,.3);
   color: #f87171;
 }
-.cat-section-count {
-  margin-left: auto;
-  font-size: .78rem;
-  font-weight: 600;
-  color: var(--text-gray);
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 20px;
-  padding: 4px 12px;
-}
-
 .catalogue-sep {
   border: none;
   border-top: 2px solid rgba(124,58,237,.3);

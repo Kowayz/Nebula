@@ -44,8 +44,8 @@ $pageJS  = $pageJS  ?? [];
   <!-- Desktop nav links -->
   <ul class="navbar-links" id="navLinks">
     <li><a href="/NEBULA/jeux.php"  <?= $currentPage==='jeux'   ? 'class="active"':'' ?>>Jeux</a></li>
-    <li><a href="/NEBULA/offres.php"<?= $currentPage==='offres' ? 'class="active"':'' ?>>Tarifs</a></li>
-    <li><a href="/NEBULA/configurateur.php"<?= $currentPage==='configurateur' ? 'class="active"':'' ?>>Configurateur</a></li>
+    <li><a href="/NEBULA/offres.php"<?= $currentPage==='offres' ? 'class="active"':'' ?>>Offres</a></li>
+    <li><a href="/NEBULA/configurateur.php"<?= $currentPage==='bouquet' ? 'class="active"':'' ?>>Bouquets</a></li>
     <li><a href="/NEBULA/boutique.php"<?= $currentPage==='boutique'? 'class="active"':'' ?>>Boutique</a></li>
   </ul>
 

@@ -27,6 +27,11 @@
   position: relative;
 }
 
+.pricing-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+}
+
 /* Carte mise en avant (Gamer) - bordure violette */
 .pricing-card.featured {
   background: rgba(124,58,237,.04);
@@ -36,16 +41,17 @@
 /* Badge "Populaire" */
 .pricing-badge {
   position: absolute;
-  top: -12px;
+  top: -18px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(10,2,20,.9);
-  border: 1px solid rgba(159,18,57,.5);
-  border-radius: 8px;
-  padding: 5px 12px;
-  font-size: .75rem;
-  font-weight: 800;
-  color: #fca5a5;
+  z-index: 3;
+  background: linear-gradient(90deg,rgba(74, 0, 128, 1) 0%, rgba(13, 13, 13, 1) 100%);
+  border: 1px solid rgba(124,58,237,.1);
+  color: var(--text);
+  border-radius: var(--radius);
+  padding: 6px 16px;
+  font-size: .8rem;
+  font-weight: 900;
 }
 
 /* Nom de l'offre (Starter, Gamer, Ultra) */
@@ -64,8 +70,6 @@
 
 /* Prix de l'offre (format: 24.99 €/mois) */
 .pricing-price {
-  font-size: 2.8rem;
-  font-weight: 900;
   line-height: 1;
   margin-bottom: 4px;
 }

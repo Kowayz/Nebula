@@ -9,10 +9,6 @@
    Le JS (configurateur.js) gère les interactions côté client.
    ============================================================ */
 
-// -- Connexion BDD et session --
-require 'includes/db.php';
-if (session_status() === PHP_SESSION_NONE) session_start();
-
 // -- Configuration de la page --
 $pageTitle = 'Mon Bouquet';
 $pageCSS   = ['configurateur'];
@@ -45,7 +41,6 @@ require 'includes/header.php';
     <div class="config-card">
       <div class="config-card-head">
         <div class="config-card-title">
-          <span class="config-step-num">1</span>
           Accessoires Nebula
         </div>
         <span class="config-step-sub">Collection exclusive</span>
@@ -158,7 +153,6 @@ require 'includes/header.php';
     <div class="config-card">
       <div class="config-card-head">
         <div class="config-card-title">
-          <span class="config-step-num">2</span>
           Votre offre
         </div>
         <span class="config-step-sub">Choisissez votre abonnement</span>
@@ -232,7 +226,6 @@ require 'includes/header.php';
     <div class="config-card">
       <div class="config-card-head">
         <div class="config-card-title">
-          <span class="config-step-num">3</span>
           Options supplémentaires
         </div>
         <span class="config-step-sub">Enrichissez votre expérience</span>

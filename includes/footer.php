@@ -12,8 +12,8 @@
       <h4>Produit</h4>
       <ul>
         <li><a href="/NEBULA/jeux.php">Bibliothèque</a></li>
-        <li><a href="/NEBULA/offres.php">Tarifs</a></li>
-        <li><a href="/NEBULA/configurateur.php">Configurateur</a></li>
+        <li><a href="/NEBULA/offres.php">Offres</a></li>
+        <li><a href="/NEBULA/configurateur.php">Bouquets</a></li>
       </ul>
     </div>
 
@@ -41,15 +41,15 @@
     <div class="social-links">
       <!-- X / Twitter -->
       <a href="#" class="social-link" aria-label="Twitter / X">
-        <img src="/NEBULA/public/assets/img/icons/contact/twitter.png" alt="icon" width="15" height="15" class="icon-img">
+        <img src="/NEBULA/public/assets/img/icons/contact/twitter.png" alt="icon" width="18" height="18" class="icon-img">
       </a>
       <!-- Discord -->
       <a href="#" class="social-link" aria-label="Discord">
-        <img src="/NEBULA/public/assets/img/icons/contact/discord.png" alt="icon" width="15" height="15" class="icon-img">
+        <img src="/NEBULA/public/assets/img/icons/contact/discord.png" alt="icon" width="18" height="18" class="icon-img">
       </a>
       <!-- YouTube -->
       <a href="#" class="social-link" aria-label="YouTube">
-        <img src="/NEBULA/public/assets/img/icons/contact/youtube.png" alt="icon" width="15" height="15" class="icon-img">
+        <img src="/NEBULA/public/assets/img/icons/contact/youtube.png" alt="icon" width="18" height="18" class="icon-img">
       </a>
     </div>
   </div>

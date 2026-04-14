@@ -1,7 +1,7 @@
 <?php
 /* ============================================================
    JEUX.PHP — Page catalogue / bibliothèque de jeux
-   Récupère les jeux via l'API IGDB, les sépare en deux
+   Récupère les jeux depuis la BDD, les sépare en deux
    catégories (inclus dans l'abonnement / à acheter) et
    les affiche dans une grille de cartes.
    ============================================================ */
@@ -70,7 +70,7 @@ require 'includes/header.php';
         Inclus dans l'abonnement
       </div>
     </div>
-    <div class="cat-section-count"><?= count($jeuxInclus) ?> jeux</div>
+    <div class="cat-section-badge cat-section-badge--stream" style="margin-left: auto;"><?= count($jeuxInclus) ?> jeux</div>
   </div>
 
   <!-- Grille des cartes de jeux inclus -->
@@ -110,7 +110,7 @@ require 'includes/header.php';
         A la carte
       </div>
     </div>
-    <div class="cat-section-count"><?= count($jeuxAchat) ?> jeux</div>
+    <div class="cat-section-badge cat-section-badge--purchase" style="margin-left: auto;"><?= count($jeuxAchat) ?> jeux</div>
   </div>
 
   <!-- Grille des cartes de jeux à acheter -->
@@ -134,9 +134,8 @@ require 'includes/header.php';
     <?php endforeach; ?>
   </div>
 
-  <!-- Message d'erreur si l'API ne retourne aucun jeu -->
   <?php if (empty($games)): ?>
-  <p style="text-align:center;color:var(--text-muted);padding:3rem 0;">Impossible de charger le catalogue. Réessayez plus tard.</p>
+  <p style="text-align:center;color:var(--text-muted);padding:3rem 0;">Aucun jeu disponible pour le moment.</p>
   <?php endif; ?>
 </div>
 

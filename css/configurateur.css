@@ -64,6 +64,11 @@
   overflow: hidden;
 }
 
+.merch-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+}
+
 /* Image du produit */
 .merch-img {
   width: 100%;
@@ -150,20 +155,6 @@
   gap: 16px; 
 }
 
-/* Cercle numéroté de l'étape */
-.config-step-num {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--main);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: .75rem;
-  color: #fff;
-}
-
 .config-step-sub { 
   font-size: .75rem; 
   color: var(--text-gray);
@@ -192,6 +183,11 @@
   position: relative;
 }
 
+.pricing-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+}
+
 /* Carte mise en avant (Gamer) */
 .pricing-card.featured {
   background: var(--bg-card);
@@ -205,14 +201,13 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
-  background: var(--bg-card);
-  border: 1px solid var(--main);
+  background: linear-gradient(90deg,rgba(74, 0, 128, 1) 0%, rgba(13, 13, 13, 1) 100%);
+  border: 1px solid rgba(124,58,237,.1);
+  color: var(--text);
   border-radius: var(--radius);
   padding: 4px 12px;
-  font-size: .75rem;
-  font-weight: 800;
-  color: var(--main);
-  white-space: nowrap;
+  font-size: .7rem;
+  font-weight: 700;
 }
 
 /* Nom de l'offre (Starter, Gamer, Ultra) */
@@ -292,7 +287,11 @@
   border: 1px solid rgba(124,58,237,.1);
   border-radius: var(--radius);
   padding: 20px;
-  cursor: pointer;
+}
+
+.option-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
 }
 
 /* Option sélectionnée */
@@ -387,17 +386,6 @@
   color: var(--text-dark);
 }
 
-/* Lien dans l'en-tête de carte */
-.config-card-link {
-  font-size: .75rem;
-  color: var(--highlight);
-  text-decoration: none;
-}
-
-.config-card-link:hover {
-  text-decoration: underline;
-}
-
 /* ----------------------------------------------------------
    8. RÉSUMÉ DE LA COMMANDE (sidebar droite)
    ---------------------------------------------------------- */
@@ -469,12 +457,6 @@
   font-size: .8rem;
   color: var(--text-dark);
   font-style: italic;
-}
-
-/* Barre de séparation */
-.summary-divider {
-  height: 1px;
-  background: rgba(124,58,237,.1);
 }
 
 /* Zone total */

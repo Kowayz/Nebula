@@ -34,12 +34,10 @@
   padding: 0 6% 52px;
 }
 
-/* Ligne flex : infos à gauche, logo à droite */
+/* Ligne flex : infos du jeu */
 .produit-hero-row {
   display: flex;
   align-items: flex-end;
-  justify-content: space-between;
-  gap: 48px;
 }
 
 /* Colonne gauche du hero (tags, titre, méta, boutons) */
@@ -63,24 +61,24 @@
 
 /* Tag individuel (pilule violette) */
 .produit-tag {
-  background: rgba(124,58,237,.18);
-  border: 1px solid rgba(124,58,237,.4);
-  border-radius: 20px;
-  padding: 5px 14px;
-  font-size: .7rem;
-  font-weight: 700;
+  background: rgba(6,4,20,.85);
+  border: 1px solid rgba(124,58,237,.5);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: .68rem;
+  font-weight: 800;
   color: var(--highlight);
+  letter-spacing: .04em;
   text-transform: uppercase;
-  letter-spacing: .08em;
+  pointer-events: none;
 }
 
 /* Variante rouge pour les jeux premium — double spécificité pour passer devant .produit-tag */
 .produit-tag.produit-tag--buy {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(159,18,57,.18);
-  border-color: rgba(159,18,57,.45);
+  background: rgba(10,2,20,.9);
+  border: 1px solid rgba(159,18,57,.5);
   color: #fca5a5;
 }
 
@@ -268,11 +266,7 @@
 
 /* Icône de la plateforme */
 .produit-platform-item .platform-icon {
-  font-size: 1.25rem;
-  color: var(--highlight);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
 }
 
 /* Nom de la plateforme sous l'icône */
@@ -289,19 +283,17 @@
    ---------------------------------------------------------- */
 
 /* Bouton "Jouer" dans le hero */
-.produit-play-btn { display: inline-flex; align-items: center; gap: 8px; }
+.produit-play-btn { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+}
 
-/* Bouton "Acheter" rouge dans le hero (avec prix) */
+/* Bouton "Acheter" dans le hero (flex pour aligner prix + texte) */
 .produit-buy-btn {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: var(--dark-red);
-  color: #fff;
-  font-weight: 700;
-}
-.produit-buy-btn:hover {
-  background: #be123c;
 }
 
 /* Prix affiché dans le bouton d'achat */
@@ -316,13 +308,6 @@
   font-size: .9rem;
 }
 
-/* Bouton rouge dans la sidebar (ajout panier) — .btn double la spécificité pour passer devant btn-primary */
-.btn.produit-buy-sidebar {
-  background: var(--dark-red);
-}
-.btn.produit-buy-sidebar:hover {
-  background: #be123c;
-}
 
 /* Espacement du bouton CTA en bas de la sidebar */
 .produit-sidebar-cta { margin-top: 20px; }

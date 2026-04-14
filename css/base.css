@@ -263,8 +263,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* hover bouton contour */
 .btn-outline:hover {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.92) 0%, rgba(109, 40, 217, 0.96) 100%);
-  border-color: rgba(124, 58, 237, 0.24);
+  background: linear-gradient(135deg, rgba(15, 8, 28, 0.82) 0%, rgba(8, 4, 18, 0.82) 100%);
+  border-color: rgba(255, 255, 255, 0.9);
   color: var(--text);
   transform: translateY(-1px);
 }

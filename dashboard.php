@@ -64,7 +64,7 @@ require 'includes/header.php';
     <!-- Ligne de statistiques (4 cartes) : jeux joués, commandes, heures, abonnement -->
     <div class="db-stats-row">
       <div class="db-stat-card">
-        <div class="db-stat-icon" style="background: RGBA(124, 58, 237, .5);background: linear-gradient(150deg, rgba(124, 58, 237, 1) 0%, rgba(30, 11, 54, 1)  100%);">
+        <div class="db-stat-icon" style="background: linear-gradient(150deg,rgba(26, 5, 0, 1) 0%, rgba(62, 230, 65, 0.8) 100%);"> 
           <img src="/NEBULA/public/assets/img/icons/dashboard/game.png" alt="icon" width="24" height="24" class="icon-img">
         </div>
         <div>
@@ -73,7 +73,7 @@ require 'includes/header.php';
         </div>
       </div>
       <div class="db-stat-card">
-        <div class="db-stat-icon" style="background: #a61b42; background: linear-gradient(149deg, rgba(166, 27, 66, 1) 0%, rgba(38, 5, 13, 1) 100%);">
+        <div class="db-stat-icon" style="background: linear-gradient(150deg,rgba(26, 5, 0, 1) 0%, rgba(255, 69, 0, 1) 100%);">
           <img src="/NEBULA/public/assets/img/icons/ecommerce/panier.png" alt="icon" width="24" height="24" class="icon-img">
         </div>
         <div>
@@ -82,7 +82,7 @@ require 'includes/header.php';
         </div>
       </div>
       <div class="db-stat-card">
-        <div class="db-stat-icon" style="background: #ad1da1; background: linear-gradient(149deg, rgba(173, 29, 161, 1) 0%, rgba(71, 4, 65, 1) 100%);">
+        <div class="db-stat-icon" style="background: linear-gradient(150deg,rgba(26, 5, 0, 1) 0%, rgba(255, 204, 0, 1) 100%);">
           <img src="/NEBULA/public/assets/img/icons/dashboard/horloge.png" alt="icon" width="24" height="24" class="icon-img">
         </div>
         <div>

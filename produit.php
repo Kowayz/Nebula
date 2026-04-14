@@ -3,7 +3,7 @@
    PRODUIT.PHP — Page de détail d'un jeu
    Affiche le hero, la description, les screenshots, les avis,
    les infos techniques et les jeux liés.
-   Le jeu est récupéré via l'API IGDB grâce au paramètre ?id=.
+   Le jeu est récupéré depuis la base de données grâce au paramètre ?id=.
    ============================================================ */
 
 // -- Charger la BDD --
@@ -26,8 +26,9 @@ if ($typeForce) {
     $typeJeu = ($id % 2 === 0) ? 'premium' : 'streaming';
 }
 
-// -- Prix fixe pour les jeux premium (achetables) --
-$prixJeu = 39.99;
+// -- Prix cyclique selon l'ID du jeu (cohérent avec jeux.php) --
+$prixJeux = [29.99, 49.99, 19.99, 59.99, 39.99, 24.99, 44.99, 34.99, 14.99, 54.99];
+$prixJeu  = $prixJeux[$id % 10];
 
 // -- Si un ID valide est fourni, récupérer les données du jeu --
 if ($id > 0) {
@@ -42,7 +43,6 @@ if ($id > 0) {
             'titre'       => $row['titre'],
             'description' => $row['description'] ?? '',
             'image_url'   => $row['image_url'],
-            'cover_url'   => $row['image_url'],
             'hero_url'    => $row['hero_url'] ?? null,
             'screenshots' => json_decode($row['screenshots'] ?? 'null', true) ?? [],
             'trailer_id'  => $row['trailer_id'] ?? null,
@@ -55,7 +55,7 @@ if ($id > 0) {
     }
 
     // Jeux liés depuis la BDD
-    $relStmt = $pdo->prepare('SELECT igdb_id, titre, image_url FROM jeu WHERE igdb_id != ? ORDER BY RAND() LIMIT 7');
+    $relStmt = $pdo->prepare('SELECT igdb_id, titre, image_url FROM jeu WHERE igdb_id != ? ORDER BY RAND() LIMIT 6');
     $relStmt->execute([$id]);
     foreach ($relStmt->fetchAll() as $r) {
         $related[] = ['id_jeu' => $r['igdb_id'], 'titre' => $r['titre'], 'image_url' => $r['image_url'] ?? ''];
@@ -107,7 +107,7 @@ require 'includes/header.php';
         <div class="produit-hero-actions">
           <?php if ($typeJeu === 'premium'): ?>
             <!-- Jeu premium : bouton d'achat avec prix -->
-            <a href="/NEBULA/panier.php?add=<?= $id ?>&nom=<?= urlencode($jeu['titre']) ?>&prix=<?= $prixJeu ?>" class="btn btn-primary btn-lg produit-buy-btn">
+            <a href="/NEBULA/panier.php?add=<?= $id ?>&nom=<?= urlencode($jeu['titre']) ?>&prix=<?= $prixJeu ?>" class="btn btn-danger btn-lg produit-buy-btn">
               <span class="produit-price"><?= number_format($prixJeu, 2) ?> €</span>
               <span class="produit-buy-text">Acheter</span>
             </a>
@@ -145,7 +145,7 @@ require 'includes/header.php';
         <p class="produit-desc-text"><?= nl2br(htmlspecialchars($jeu['description'] ?? '')) ?></p>
       </div>
 
-      <!-- Carte : Aperçu (trailer YouTube + screenshots IGDB) -->
+      <!-- Carte : Aperçu (trailer YouTube + screenshots) -->
       <div class="db-card">
         <div class="db-card-head"><div class="db-card-title">Aperçu</div></div>
 
@@ -241,9 +241,9 @@ require 'includes/header.php';
     <aside class="produit-info-col">
 
       <!-- Image de couverture du jeu -->
-      <?php if (!empty($jeu['cover_url'])): ?>
+      <?php if (!empty($jeu['image_url'])): ?>
       <div class="produit-cover-wrap">
-        <img class="produit-cover" src="<?= htmlspecialchars($jeu['cover_url']) ?>" alt="<?= htmlspecialchars($jeu['titre']) ?>">
+        <img class="produit-cover" src="<?= htmlspecialchars($jeu['image_url']) ?>" alt="<?= htmlspecialchars($jeu['titre']) ?>">
       </div>
       <?php endif; ?>
 
@@ -256,7 +256,7 @@ require 'includes/header.php';
               <img src="/NEBULA/public/assets/img/icons/dashboard/star.png" alt="icon" width="16" height="16" class="icon-img" style="opacity:0.8">
               Note
             </span>
-            <span class="produit-info-val">83</span>
+            <span class="produit-info-val"><?= !empty($jeu['rating']) ? number_format($jeu['rating'], 0) . ' / 100' : 'N/A' ?></span>
           </div>
 
           <?php if ($dateFormatted): ?>
@@ -312,7 +312,7 @@ require 'includes/header.php';
 
         <!-- Bouton CTA sidebar : acheter ou jouer selon le type -->
         <?php if ($typeJeu === 'premium'): ?>
-          <a href="/NEBULA/panier.php?add=<?= $id ?>&nom=<?= urlencode($jeu['titre']) ?>&prix=<?= $prixJeu ?>" class="btn btn-primary btn-full produit-buy-sidebar produit-sidebar-cta">
+          <a href="/NEBULA/panier.php?add=<?= $id ?>&nom=<?= urlencode($jeu['titre']) ?>&prix=<?= $prixJeu ?>" class="btn btn-danger btn-full produit-sidebar-cta">
             Ajouter au panier — <?= number_format($prixJeu, 2) ?> €
           </a>
         <?php else: ?>
@@ -327,10 +327,10 @@ require 'includes/header.php';
   </div>
 </section>
 
-<!-- ── Jeux liés ─────────────────────────────────────────────────
-     Grille de 7 jeux aléatoires du catalogue, affichés avec les
-     mêmes cartes que la page jeux.php (catalogue-card).
-     ──────────────────────────────────────────────────────────────── -->
+<!-- ── Jeux similaires : 7 jeux aléatoires du catalogue ────────
+     Affiché uniquement si $related n'est pas vide.
+     Réutilise les classes catalogue-card de jeux.php.
+     ─────────────────────────────────────────────────────────────── -->
 <?php if (!empty($related)): ?>
 <section class="section produit-related-section">
   <div class="section-header">
@@ -338,25 +338,30 @@ require 'includes/header.php';
     <h2>Autres jeux disponibles</h2>
     <div class="glow-bar"></div>
   </div>
+
+  <!-- Grille de cartes réutilisant les classes de jeux.php / index.php -->
   <div class="catalogue-grid">
     <?php foreach ($related as $rel):
-      if (empty($rel['titre'])) continue;
+      if (empty($rel['titre'])) continue; // Ignorer les entrées sans titre
     ?>
     <a href="/NEBULA/produit.php?id=<?= (int)$rel['id_jeu'] ?>" class="catalogue-card">
       <div class="catalogue-card-poster">
         <?php if (!empty($rel['image_url'])): ?>
           <img src="<?= htmlspecialchars($rel['image_url']) ?>" alt="<?= htmlspecialchars($rel['titre']) ?>" loading="lazy">
         <?php else: ?>
+          <!-- Placeholder si pas de couverture en base -->
           <div class="catalogue-card-placeholder"></div>
         <?php endif; ?>
       </div>
       <div class="catalogue-card-overlay">
         <div class="catalogue-card-title"><?= htmlspecialchars($rel['titre']) ?></div>
-        <div class="catalogue-play-btn">Jouer</div>
+        <div class="btn btn-primary btn-sm">Jouer</div>
       </div>
     </a>
     <?php endforeach; ?>
   </div>
+
+  <!-- Lien vers le catalogue complet -->
   <div class="text-center produit-related-more">
     <a href="/NEBULA/jeux.php" class="btn btn-outline btn-lg">Voir tout le catalogue</a>
   </div>

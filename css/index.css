@@ -111,7 +111,6 @@
   border-radius: 16px;
   padding: 32px 24px;
   text-align: center;
-  transition: transform .25s ease, border-color .25s ease;
 }
 
 /* Léger soulèvement au hover */
