@@ -16,7 +16,7 @@ function majResume() {
   // Écrit le total dans #summaryTotal (format: "24,99 €")
   document.getElementById('summaryTotal').textContent = total.toFixed(2).replace('.', ',') + ' €';
 
-  // Met à jour le nom du plan choisi ("-" si aucun)
+  // Met à jour le nom du plan choisi ("-" si aucun)ddd
   document.getElementById('summaryPlanName').textContent = nomOffre || '-';
   // Met à jour le prix du plan ("-" si gratuit/non choisi)
   document.getElementById('summaryPlanPrice').textContent = prixOffre > 0 ? prixOffre.toFixed(2).replace('.', ',') + ' €' : '-';
